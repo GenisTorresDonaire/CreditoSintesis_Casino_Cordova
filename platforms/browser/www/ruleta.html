@@ -67,32 +67,145 @@
             </div>
 
             <!--    MENU    -->
-            <div class="row justify-content-md-center" style="background-color: white;">
+            <div class="row" style="background-color: white;">
           
-                <canvas id='canvas' height="500" width="800"></canvas>
-
+                <canvas style="float: left; margin-left: 10px;" id='canvas' height="500" width="400"></canvas>
+                <div id='tablero' style="height:500px; width: 730px; float: right;">
+                    <table id="tableroRuleta">
+                      <tr>
+                        <td id="0" class="verde" rowspan="3"> 0 </td>
+                        <td id="3" class="rojo">3</td>
+                        <td id="6" class="negro">6</td>
+                        <td id="9" class="rojo">9</td>
+                        <td id="12" class="rojo">12</td>
+                        <td id="15" class="negro">15</td>
+                        <td id="18" class="rojo">18</td>
+                        <td id="21" class="rojo">21</td>
+                        <td id="24" class="negro">24</td>
+                        <td id="27" class="rojo">27</td>
+                        <td id="30" class="rojo">30</td>
+                        <td id="33" class="negro">33</td>
+                        <td id="36" class="rojo">36</td>
+                        <td id="fila3" class="azul">2-1</td>
+                      </tr>
+                      <tr>
+                        <td id="2" class="negro">2</td>
+                        <td id="5" class="rojo">5</td>
+                        <td id="8" class="negro">8</td>
+                        <td id="11" class="negro">11</td>
+                        <td id="14" class="rojo">14</td>
+                        <td id="17" class="negro">17</td>
+                        <td id="20" class="negro">20</td>
+                        <td id="23" class="rojo">23</td>
+                        <td id="26" class="negro">26</td>
+                        <td id="29" class="negro">29</td>
+                        <td id="32" class="rojo">32</td>
+                        <td id="35" class="negro">35</td>
+                        <td id="fila2" class="azul">2-1</td>
+                      </tr>
+                      <tr>
+                        <td id="1" class="rojo">1</td>
+                        <td id="4" class="negro">4</td>
+                        <td id="7" class="rojo">7</td>
+                        <td id="10" class="negro">10</td>
+                        <td id="13" class="negro">13</td>
+                        <td id="16" class="rojo">16</td>
+                        <td id="19" class="rojo">19</td>
+                        <td id="22" class="negro">22</td>
+                        <td id="25" class="rojo">25</td>
+                        <td id="28" class="negro">28</td>
+                        <td id="31" class="negro">31</td>
+                        <td id="34" class="rojo">34</td>
+                        <td id="fila1" class="azul">2-1</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td id="1a12" class="azul" colspan="4">1a12</td>
+                        <td id="2a12" class="azul" colspan="4">2a12</td>
+                        <td id="3a12" class="azul" colspan="4">3a12</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td id="1a18" class="azul" colspan="2">1a18</td>
+                        <td id="par" class="azul" colspan="2">Par</td>
+                        <td id="rojo" class="azul" colspan="2">Rojo</div></td>
+                        <td id="negro" class="azul" colspan="2">Negro</td>
+                        <td id="impar" class="azul" colspan="2">Impar</td>
+                        <td id="19a36" class="azul" colspan="2">19a36</td>
+                      </tr>
+                    </table>
+                </div>
             </div>
         </div>
 
         <script>
 
+            // Calculo de cuantos PI ocupara 
             var alfa = 2*Math.PI/36; // 0,17
             
-            // creacion de la circunferencia
-            var c=document.getElementById("canvas");
-            var ctx=c.getContext("2d");
-            ctx.beginPath();
-            ctx.arc(400,250,200,0,2*Math.PI);
-            ctx.stroke();  
-            ctx.closePath();
+            // Creacion del canvas
+            var elemento = document.getElementById("canvas");
+            var lienzo = elemento.getContext("2d");
             
+            var radio = 140;
+            // Creacion de la circunferencia
+            lienzo.beginPath();
+            lienzo.arc(200,250,radio,0,2*Math.PI);
+            lienzo.stroke();  
+
+            // Borde naranja del tablero
+            lienzo.beginPath();
+            lienzo.arc(200,250,180,0,2*Math.PI);
+            lienzo.lineWidth = 40;
+            lienzo.strokeStyle = " #ffaf04";
+            lienzo.stroke(); 
+
+            // Variables alfa, y, x
+            var alfaAnterior = 0;
+            var y = 0;
+            var x = 0;
+
+            // for para dividir 
+            for( var numeroCeldas = 1; numeroCeldas <= 36; numeroCeldas++ ){
+
+                //alert("X: " + x + " Y: " + y + " numero: " + numeroCeldas );
+                //y = Math.sin(alfaAnterior)*radio;
+                //x = Math.cos(alfaAnterior)*radio;
+
+                // Creacion del arco de cada celda
+                lienzo.beginPath();
+                lienzo.arc(200, 250, radio, alfaAnterior, alfa*numeroCeldas);
+
+                //lienzo.fillText( numeroCeldas, alfaAnterior, alfa*numeroCeldas ); 
+                    
+                // Eleccion del color
+                if ( numeroCeldas == 1){
+                    lienzo.lineWidth = 80;
+                    lienzo.strokeStyle = "green";
+                }
+                else if ( ((numeroCeldas % 2) == 0) == true ){
+                    lienzo.lineWidth = 80;
+                    lienzo.strokeStyle = "red";
+                }
+                else{
+                    lienzo.lineWidth = 80;
+                    lienzo.strokeStyle = "black";
+                }
+                lienzo.stroke();  
+
+                alfaAnterior = alfa*numeroCeldas;
+            }
+            
+           // Math.cos(x);
+           // Math.sin(x);
+            
+
 
         </script>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/script.js"></script> 
-        
+        <script type="text/javascript" src="js/script.js"></script>     
     </body>
 </html>

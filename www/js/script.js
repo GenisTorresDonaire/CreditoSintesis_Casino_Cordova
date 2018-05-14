@@ -55,3 +55,20 @@ $( "#ir_tienda" ).click(function() {
 $( "#ir_ajustes" ).click(function() { 
   alert("ajustes");
 });
+
+
+
+
+
+
+// ============================================ Ruleta =========================================
+
+// Funcion que se encarga de 
+$( "td" ).click(function(e) {
+  //alert( "e: " + this.id );
+  
+  // insercion de la ficha
+  $("#"+this.id).empty();
+  $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
+
+});

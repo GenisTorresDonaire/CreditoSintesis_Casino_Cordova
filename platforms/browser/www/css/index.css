@@ -114,3 +114,54 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+
+#tableroRuleta{
+    margin: 20px 20px 20px 20px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+#tableroRuleta td{
+    height: 55px; 
+    width: 55px;
+    border: 2px solid white;
+    color: white;
+    font-size: 20px;
+    
+}
+
+
+.verde{
+    background-color: green;
+}
+
+.rojo{
+    background-color: red;   
+}
+
+.negro{
+    background-color: black;
+}
+
+.azul{
+    background-color: #006bb3;
+}
+
+
+.rombo {
+    width: 30px; 
+    height: 30px; 
+    border: 3px solid black; 
+    background: #EC5463;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.ficha{
+    height: 35px; 
+    width: 35px;
+}
