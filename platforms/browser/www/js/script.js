@@ -63,8 +63,9 @@ $( "#ir_ajustes" ).click(function() {
 
 // ============================================ Ruleta =========================================
 
+// Funcion que se encarga de 
 $( "td" ).click(function(e) {
-  alert( "e: " + this.id );
+  //alert( "e: " + this.id );
   
   // insercion de la ficha
   $("#"+this.id).empty();
