@@ -119,7 +119,7 @@ h1 {
 #tableroRuleta{
     margin: 20px 20px 20px 20px;
     text-align: center;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 
 #tableroRuleta td{
@@ -130,7 +130,6 @@ h1 {
     font-size: 20px;
     
 }
-
 
 .verde{
     background-color: green;
@@ -164,4 +163,23 @@ h1 {
 .ficha{
     height: 35px; 
     width: 35px;
+}
+
+.reloj{
+    text-align: center; 
+    font-size: 40px; 
+    font-family: Courier,sans-serif;
+    color: #363431;
+    margin-top: 30px;
+}
+
+
+.apuesta{
+    height: 50px;
+    width: 200px; 
+    font-size: 40px;
+    border: 1px solid orange;
+    border-radius: 10px;
+    -moz-appearance:textfield;
+    text-align: center;
 }

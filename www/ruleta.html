@@ -68,9 +68,13 @@
 
             <!--    MENU    -->
             <div class="row" style="background-color: white;">
-          
-                <canvas style="float: left; margin-left: 10px;" id='canvas' height="500" width="400"></canvas>
+                <canvas id='canvas' style="float: left; margin-left: 10px;"  height="500" width="400"></canvas>
                 <div id='tablero' style="height:500px; width: 730px; float: right;">
+
+                    <div class="reloj">
+                        <label id="labelTiempo">00:00</label>
+                    </div>
+
                     <table id="tableroRuleta">
                       <tr>
                         <td id="0" class="verde" rowspan="3"> 0 </td>
@@ -134,6 +138,11 @@
                         <td id="19a36" class="azul" colspan="2">19a36</td>
                       </tr>
                     </table>
+
+                    <div style="text-align: center;">
+                        <input type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+                    </div>
+                    
                 </div>
             </div>
         </div>
