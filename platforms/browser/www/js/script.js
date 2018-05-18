@@ -6,9 +6,7 @@ $('#password').val("P@ssw0rd");
 * LOGIN
 */
 $( "#logear" ).click(function() {	
-  window.location.replace("inicio.html");
-
-
+  
   // Obtencion de los valores, de user y de password
   var usuario = $('#usuario').val();
 	var contraseña = $('#password').val();
@@ -20,15 +18,13 @@ $( "#logear" ).click(function() {
     
    	success: function(respuesta){
    		respuesta = JSON.parse(respuesta);
-   		 
-      
       
       // si todo va bien, se guarda el token en el localstorage y se le llevara al listado de jugadores
       if( respuesta.status == "ok" ){
       	localStorage.setItem('token', respuesta.token );
         window.location.replace("inicio.html");
       }
-      
+
     },
     error: function(respuesta){
      	console.log( "erroor login ----> " + JSON.stringify(respuesta) );

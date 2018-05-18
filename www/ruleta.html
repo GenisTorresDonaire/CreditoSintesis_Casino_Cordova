@@ -57,6 +57,11 @@
 
         <div class="container" style="height: 100%; width: 100%;">
             <!--    AJUSTES    -->
+            <div id="creditos" style="border-radius: 10px; background: rgba(255,255,255,0.5); float: left; margin-top: 30px; min-width: 150px; text-align: center;">
+                <span style="font-size: 40px; padding-right: 10px; padding-left: 10px;"><label id="creditosUsuario" >0</label><label>$</label></span>
+            </div>
+
+            <!--    AJUSTES    -->
             <div id="ir_ajustes" style="border-radius: 10px; background: rgba(0,0,255,0.5); float: right; margin-top: 30px; padding: 5px 5px 5px 5px;">
                 <img src="img/ajustes.png" style="width: 50px; height: 50px;">
             </div>
@@ -147,15 +152,29 @@
             </div>
         </div>
 
-        <script>
-
-
-        </script>
-
+        
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/script.js"></script>  
-        <script type="text/javascript" src="js/ruleta.js"></script>      
+        <script type="text/javascript" src="js/ruleta.js"></script>   
+
+        <script>
+            
+            $.ajax({
+                type : "GET",
+                url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
+
+                success: function(respuesta){
+                    respuesta = JSON.parse(respuesta);
+                    alert( "respuesta " + respuesta);
+                    console.log( "respuesta " + respuesta);
+                },
+                error: function(respuesta){
+                    console.log( "erroor login ----> " + JSON.stringify(respuesta) );
+                } 
+            }); 
+        </script>
+
     </body>
 </html>
