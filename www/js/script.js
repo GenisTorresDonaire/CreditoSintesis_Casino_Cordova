@@ -22,7 +22,8 @@ $( "#logear" ).click(function() {
       // si todo va bien, se guarda el token en el localstorage y se le llevara al listado de jugadores
       if( respuesta.status == "ok" ){
       	localStorage.setItem('token', respuesta.token );
-        window.location.replace("inicio.html");
+        //window.location.replace("inicio.html");
+        window.location.replace("listado.html");
       }
 
     },
@@ -59,14 +60,3 @@ $( "#ir_ajustes" ).click(function() {
 
 
 
-// ============================================ Ruleta =========================================
-
-// Funcion que se encarga de 
-$( "td" ).click(function(e) {
-  //alert( "e: " + this.id );
-  
-  // insercion de la ficha
-  $("#"+this.id).empty();
-  $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
-
-});

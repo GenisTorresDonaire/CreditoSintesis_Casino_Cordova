@@ -16,6 +16,43 @@ var lienzo = elemento.getContext("2d");
 
 ruleta();
 
+
+
+// ============================================ Ruleta =========================================
+
+// Funcion que se encarga de 
+$( "td" ).click(function(e) {
+    
+    // insercion de la ficha
+    $("#"+this.id).empty();
+    $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
+
+    /*
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+,     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+
+            if( respuesta[0].status == 'ok' ){
+                localStorage.setItem('creditos', respuesta[0].creditos);
+                $('#creditosUsuario').text(localStorage.getItem('creditos'));
+            }
+        },
+        error: function(respuesta){
+            alert( "erroor login ----> " + JSON.stringify(respuesta) );
+        } 
+    });
+    */ 
+});
+
+
+
+
+
+
+
 // function 
 function ruleta(){
     id_accion = setInterval(animacionGiro, 10);

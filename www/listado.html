@@ -1,36 +1,10 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
     <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
+      
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-eval' 'unsafe-inline';"">
         
-        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -42,8 +16,7 @@
         
         <title>Casino World</title>
     </head>
-    <body>
-        
+    <body> 
         <div class="app" style="visibility: hidden;">
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
@@ -51,7 +24,6 @@
                 <p class="event received">Device is Ready</p>
             </div>
         </div>
-
 
         <div class="container" style="height: 100%; width: 100%;">
             <!--    AJUSTES    -->
@@ -65,14 +37,85 @@
             </div>
 
             <!--    MENU    -->
-            <div class="row justify-content-md-center">
-                <label>ruleta</label>
+            <div class="row" style="background-color: white; border-radius: 5px; background: rgba(255,255,255,0.5); padding: 10px 10px 10px 10px;">
+                <div id='divSalas' style="height:450px; width: 730px; display: inline-block;"></div>
             </div>
         </div>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/script.js"></script>   
+        <script type="text/javascript" src="js/script.js"></script>
+
+        <script>
+
+            alert(localStorage.getItem('token'));
+
+            /*
+            setInterval(function(){
+
+                $('#divSalas').empty();
+            */
+                $.ajax({
+                    type : "GET",
+                    url : "http://appcasino.herokuapp.com/api/salas_ruleta",     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+
+
+                        if( respuesta[0].status == 'ok' ){
+                            
+                            // for para obtener todas las salas con sus datos respectivos
+                            for(var numSalas = 0; numSalas < respuesta[0].mensaje.length; numSalas++){
+                                
+                                // Creacion del div con los datos de cada sala
+                                var div = $('<div id="'+respuesta[0].mensaje[numSalas].sala+'" style="height: 200px; width: 200px; border: 2px solid black; float: left; text-align: center; margin-left: 10px; background: rgba(255,0,0,0.4); border-radius: 5px; padding: 10px 10px 10px 10px;"></div>').click( function(e){ entrarSala(this.id); });
+                                
+                                // Creacion de la imagen de sala
+                                var img = $('<img style="height: 120px; width: 120px; margin-bottom: 5px;" src="img/ruleta.png"></img>');
+
+                                // Creacion de la etiqueta sala con la id
+                                var sala = $('<h3>Sala: '+respuesta[0].mensaje[numSalas].sala+'</h3>');
+                                
+                                // jugadores en la sala
+                                var jugadores = $('<h3><b>'+respuesta[0].mensaje[numSalas].jugadores+'/3</b></h3>');
+
+                                div.append(img);
+                                div.append(sala);
+                                div.append(jugadores);
+                                $('#divSalas').append(div);
+                            }
+                        }    
+                    },
+                    error: function(respuesta){
+                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            
+            //}, 1000);
+
+            // funcion que se encarga de entrar a una room
+            function entrarSala(e){
+
+                alert("http://appcasino.herokuapp.com/api/entrar_room/"+e+"/"+localStorage.getItem('token'));
+
+                $.ajax({
+                    type : "GET",
+                    url : "http://appcasino.herokuapp.com/api/entrar_room/"+e+"/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+
+                        if( respuesta[0].status == 'ok' ){
+                            alert(JSON.stringify(respuesta[0]));
+                        }
+                    },
+                    error: function(respuesta){
+                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            }
+        </script>   
     </body>
 </html>
