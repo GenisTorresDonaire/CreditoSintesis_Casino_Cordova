@@ -6,6 +6,8 @@ $('#password').val("P@ssw0rd");
 * LOGIN
 */
 $( "#logear" ).click(function() {	
+  window.location.replace("inicio.html");
+
 
   // Obtencion de los valores, de user y de password
   var usuario = $('#usuario').val();
