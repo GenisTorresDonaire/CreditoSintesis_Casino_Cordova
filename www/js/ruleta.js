@@ -21,16 +21,20 @@ ruleta();
 // ============================================ Ruleta =========================================
 
 // Funcion que se encarga de 
-$( "td" ).click(function(e) {
-    
+$( "td" ).click(function(e) {   
+
+
     // insercion de la ficha
     $("#"+this.id).empty();
     $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
+    
+    alert(this.id);
+    alert($('#'+this.id).attr('class'));
 
     /*
     $.ajax({
         type : "GET",
-        url : "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+,     
+        url : "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+creditos+"/"++"/"+$('creditos').text(),     
 
         success: function(respuesta){
             respuesta = JSON.parse(respuesta);
@@ -44,7 +48,8 @@ $( "td" ).click(function(e) {
             alert( "erroor login ----> " + JSON.stringify(respuesta) );
         } 
     });
-    */ 
+    */
+    
 });
 
 
@@ -210,6 +215,7 @@ function girarRuleta () {
     $('#labelTiempo').text("00:00");
 
     // Bloquear td's
+
 
     // Llamada al server para cambiar el estado
 

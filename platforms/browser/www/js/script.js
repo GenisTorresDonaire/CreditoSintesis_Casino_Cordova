@@ -22,8 +22,10 @@ $( "#logear" ).click(function() {
       // si todo va bien, se guarda el token en el localstorage y se le llevara al listado de jugadores
       if( respuesta.status == "ok" ){
       	localStorage.setItem('token', respuesta.token );
+        
+        window.location.replace("ruleta.html");
+        
         //window.location.replace("inicio.html");
-        window.location.replace("listado.html");
       }
 
     },
@@ -44,7 +46,7 @@ $( "#ir_blackjack" ).click(function() {
 
 $( "#ir_ruleta" ).click(function() { 
   //alert("ruleta");
-  window.location.replace("ruleta.html");
+  window.location.replace("listado.html");
 });
 
 $( "#ir_tienda" ).click(function() { 

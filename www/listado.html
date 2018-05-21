@@ -49,57 +49,45 @@
 
         <script>
 
-            alert(localStorage.getItem('token'));
+            $.ajax({
+                type : "GET",
+                url : "http://appcasino.herokuapp.com/api/salas_ruleta",     
 
-            /*
-            setInterval(function(){
+                success: function(respuesta){
+                    respuesta = JSON.parse(respuesta);
 
-                $('#divSalas').empty();
-            */
-                $.ajax({
-                    type : "GET",
-                    url : "http://appcasino.herokuapp.com/api/salas_ruleta",     
-
-                    success: function(respuesta){
-                        respuesta = JSON.parse(respuesta);
-
-
-                        if( respuesta[0].status == 'ok' ){
+                    if( respuesta[0].status == 'ok' ){
+                        
+                        // for para obtener todas las salas con sus datos respectivos
+                        for(var numSalas = 0; numSalas < respuesta[0].mensaje.length; numSalas++){
                             
-                            // for para obtener todas las salas con sus datos respectivos
-                            for(var numSalas = 0; numSalas < respuesta[0].mensaje.length; numSalas++){
-                                
-                                // Creacion del div con los datos de cada sala
-                                var div = $('<div id="'+respuesta[0].mensaje[numSalas].sala+'" style="height: 200px; width: 200px; border: 2px solid black; float: left; text-align: center; margin-left: 10px; background: rgba(255,0,0,0.4); border-radius: 5px; padding: 10px 10px 10px 10px;"></div>').click( function(e){ entrarSala(this.id); });
-                                
-                                // Creacion de la imagen de sala
-                                var img = $('<img style="height: 120px; width: 120px; margin-bottom: 5px;" src="img/ruleta.png"></img>');
+                            // Creacion del div con los datos de cada sala
+                            var div = $('<div id="'+respuesta[0].mensaje[numSalas].sala+'" style="height: 200px; width: 200px; border: 2px solid black; float: left; text-align: center; margin-left: 10px; background: rgba(255,0,0,0.4); border-radius: 5px; padding: 10px 10px 10px 10px;"></div>').click( function(e){ entrarSala(this.id); });
+                            
+                            // Creacion de la imagen de sala
+                            var img = $('<img style="height: 120px; width: 120px; margin-bottom: 5px;" src="img/ruleta.png"></img>');
 
-                                // Creacion de la etiqueta sala con la id
-                                var sala = $('<h3>Sala: '+respuesta[0].mensaje[numSalas].sala+'</h3>');
-                                
-                                // jugadores en la sala
-                                var jugadores = $('<h3><b>'+respuesta[0].mensaje[numSalas].jugadores+'/3</b></h3>');
+                            // Creacion de la etiqueta sala con la id
+                            var sala = $('<h3>Sala: '+respuesta[0].mensaje[numSalas].sala+'</h3>');
+                            
+                            // jugadores en la sala
+                            var jugadores = $('<h3><b>'+respuesta[0].mensaje[numSalas].jugadores+'/3</b></h3>');
 
-                                div.append(img);
-                                div.append(sala);
-                                div.append(jugadores);
-                                $('#divSalas').append(div);
-                            }
-                        }    
-                    },
-                    error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
-                    } 
-                }); 
+                            div.append(img);
+                            div.append(sala);
+                            div.append(jugadores);
+                            $('#divSalas').append(div);
+                        }
+                    }    
+                },
+                error: function(respuesta){
+                    alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                } 
+            }); 
             
-            //}, 1000);
 
             // funcion que se encarga de entrar a una room
             function entrarSala(e){
-
-                alert("http://appcasino.herokuapp.com/api/entrar_room/"+e+"/"+localStorage.getItem('token'));
-
                 $.ajax({
                     type : "GET",
                     url : "http://appcasino.herokuapp.com/api/entrar_room/"+e+"/"+localStorage.getItem('token'),     
@@ -107,8 +95,11 @@
                     success: function(respuesta){
                         respuesta = JSON.parse(respuesta);
 
-                        if( respuesta[0].status == 'ok' ){
-                            alert(JSON.stringify(respuesta[0]));
+                        if( respuesta.status == 'ok' ){
+                            localStorage.setItem('id_partida', respuesta.id_partida );
+                            window.location.replace("ruleta.html");
+                        }else{
+                            alert("erroor: " + JSON.stringify(respuesta));
                         }
                     },
                     error: function(respuesta){

@@ -112,10 +112,14 @@
                     </table>
 
                     <div style="text-align: center;">
-                        <input type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+                        <input id="creditos" type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
                     </div>
                     
                 </div>
+
+                </div>
+                
+                
             </div>
         </div>
 
@@ -145,6 +149,9 @@
                     } 
                 });
             }, 1000);
+
+
+
         </script>
 
     </body>
