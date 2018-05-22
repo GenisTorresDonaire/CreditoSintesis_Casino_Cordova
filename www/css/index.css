@@ -117,9 +117,10 @@ h1 {
 
 
 #tableroRuleta{
-    margin: 20px 20px 20px 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     text-align: center;
-    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 #tableroRuleta td{
@@ -170,7 +171,7 @@ h1 {
     font-size: 40px; 
     font-family: Courier,sans-serif;
     color: #363431;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 
@@ -182,4 +183,31 @@ h1 {
     border-radius: 10px;
     -moz-appearance:textfield;
     text-align: center;
+    margin-top: 10px;
+}
+
+.numerosAnteriores{
+    text-align: center; 
+}
+
+/*
+.tablaNuemerosAnteriores{
+    margin-top: 10px;
+    margin-left: 15%;   
+}
+*/
+
+.tablaNuemerosAnteriores td{
+    height: 50px; 
+    width: 50px; 
+    text-align: center; 
+    border: 1px solid black;
+}
+
+.numerosAnteriores{
+    width: 500px;
+    height: 50px;
+    border: 2px solid grey;
+    margin-top: 10px;
+    margin-left: 15%;   
 }

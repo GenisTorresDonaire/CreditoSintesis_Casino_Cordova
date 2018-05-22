@@ -43,13 +43,21 @@
                 <canvas id='canvas' style="float: left; margin-left: 10px;"  height="500" width="400"></canvas>
                 <div id='tablero' style="height:500px; width: 730px; float: right;">
 
+                    <div class="numerosAnteriores" >
+                        <table class="tablaNuemerosAnteriores" style="padding-left: 100px;">
+                            <tr id="insertarTDsNumero">
+                                <!-- Zona donde se insertaran los numeros -->
+                            </tr>
+                        </table>
+                    </div>
+
                     <div class="reloj">
                         <label id="labelTiempo">00:00</label>
                     </div>
 
                     <table id="tableroRuleta">
                       <tr>
-                        <td id="0" class="verde" rowspan="3"> 0 </td>
+                        <td id="0" class="verde" rowspan="3">0</td>
                         <td id="3" class="rojo">3</td>
                         <td id="6" class="negro">6</td>
                         <td id="9" class="rojo">9</td>
