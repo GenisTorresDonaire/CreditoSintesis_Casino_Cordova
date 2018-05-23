@@ -120,7 +120,7 @@
                     </table>
 
                     <div style="text-align: center;">
-                        <input id="creditos" type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+                        <input id="creditosApuesta" type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
                     </div>
                     
                 </div>
@@ -156,6 +156,27 @@
                         alert( "erroor login ----> " + JSON.stringify(respuesta) );
                     } 
                 });
+
+
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+
+                        if( respuesta[0].status == 'ok' ){
+                            localStorage.setItem('creditos', respuesta[0].creditos);
+                            $('#creditosUsuario').text(localStorage.getItem('creditos'));
+                        }
+                    },
+                    error: function(respuesta){
+                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    } 
+                });
+
+
+
             }, 1000);
 
 

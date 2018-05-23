@@ -22,38 +22,70 @@ ruleta();
 
 // Funcion que se encarga de 
 $( "td" ).click(function(e) {   
-
+    var valor = "";
+    var tipo = "";
     var tiempoActual = $('#labelTiempo').text();
 
     if ( tiempoActual != "00:00" ){
-        // insercion de la ficha
-        $("#"+this.id).empty();
-        $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
+        // DOCENA
+        if ( this.id == "1a12" || this.id == "2a12" || this.id == "3a12" ){
+            tipo = "docena";
+            valor = this.id;
+        }
+        // FILAS
+        else if( this.id == "fila1" || this.id == "fila2" || this.id == "fila3" ){
+            tipo = "filas";
+            valor = this.id;
+        }
+        // MITAD
+        else if( this.id == "1a18" || this.id == "19a36" ){
+            tipo = "mitad";
+            valor = this.id;
+        }
+        // COLOR
+        else if( this.id == "rojo" || this.id == "negro" ){
+            tipo = "color";
+            valor = this.id;
+        }
+        // PAR/IMPAR
+        else if( this.id == "par" || this.id == "impar" ){
+            tipo = "par/impar";
+            valor = this.id;
+        }
+        // NUMERO
+        else{
+            tipo = "numero";
+            valor = this.id;
+        }
+
+        //alert( "tipo: " + tipo + " valor: " + valor );
+
+        //alert( $('#creditosApuesta').val() );
+        alert( "------> URL: " + "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val() );
+
+        /*
+        *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
+        */
+        $.ajax({
+            type : "GET",
+            url : "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val(),     
+
+            success: function(respuesta){
+                respuesta = JSON.parse(respuesta);
+                alert( "------> URL: " + "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val() + " ------> JSON:" + JSON.stringify(respuesta) );
+
+                if( respuesta[0].status == 'ok' ){
+                    localStorage.setItem('creditos', respuesta[0].creditos);
+                    $('#creditosUsuario').text(localStorage.getItem('creditos'));
+                }
+            },
+            error: function(respuesta){
+                alert( "erroor ----> " + JSON.stringify(respuesta) );
+                alert( "------> URL: " + "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val() );
+            } 
+        });
         
-        alert(this.id);
-        alert($('#'+this.id).attr('class'));
     }
-    
-
-    /*
-    $.ajax({
-        type : "GET",
-        url : "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+creditos+"/"++"/"+$('creditos').text(),     
-
-        success: function(respuesta){
-            respuesta = JSON.parse(respuesta);
-
-            if( respuesta[0].status == 'ok' ){
-                localStorage.setItem('creditos', respuesta[0].creditos);
-                $('#creditosUsuario').text(localStorage.getItem('creditos'));
-            }
-        },
-        error: function(respuesta){
-            alert( "erroor login ----> " + JSON.stringify(respuesta) );
-        } 
-    });
-    */
-    
 });
 
 
@@ -309,7 +341,14 @@ function girarRuleta () {
 
 
 
+/*
+    // insercion de la ficha
+    $("#"+this.id).empty();
+    $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
 
+    alert(this.id);
+    alert($('#'+this.id).attr('class'));
+*/
 
 
 /*
