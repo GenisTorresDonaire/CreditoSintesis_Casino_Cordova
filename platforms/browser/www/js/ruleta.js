@@ -31,31 +31,32 @@ setInterval(function(){
         success: function(respuesta){
             respuesta = JSON.parse(respuesta);
             
-            if( respuesta.status == "ok" ){
-
-                alert( respuesta.mensaje.length );
+            if( respuesta[0].status == "ok" ){
 
                 // for para manipular las apuestas por separado
-                for ( var num_apuestas = 0; num_apuestas < respuesta.mensaje.length; num_apuestas++ ){
-                    alert( respuesta.mensaje[num_apuestas] );
-                    /*
-                    $("#"+respuesta.mensaje.valor).empty();
-
+                for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
+                    //alert( JSON.stringify(respuesta[0].mensaje[num_apuestas]) );
+                    
+                    
+                    
                     $.ajax({
                         type : "GET",
                         url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
 
-                        success: function(respuesta){
-                            respuesta = JSON.parse(respuesta);
+                        success: function(respuesta_color){
+                            respuesta_colores = JSON.parse(respuesta_color);
                             
+                            $("#"+respuesta[0].mensaje[num_apuestas].valor).empty();
+                            
+                            alert( JSON.stringify(respuesta_colores) );
 
-                            //$("#"+respuesta.mensaje.valor).append('<img class="ficha" src="img/ficha_'+amarillo+'.png"></img>'); 
+                            //$("#"+respuesta[0].mensaje[num_apuestas].valor).append('<img class="ficha" src="img/ficha_'+amarillo+'.png"></img>'); 
                         },
-                        error: function(respuesta){
-                            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+                        error: function(respuesta_color){
+                            alert( "erroor ----> " + JSON.stringify(respuesta_color) );
                         } 
                     });  
-                    */
+                    
                 }              
             }   
 
