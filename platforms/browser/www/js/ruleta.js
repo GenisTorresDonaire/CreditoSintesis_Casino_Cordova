@@ -20,6 +20,58 @@ ruleta();
 
 // ============================================ Ruleta =========================================
 
+// BUCLE ONLINE
+setInterval(function(){
+
+    // Llamada para obtener todas las apuestas que se van haciendo
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/printar_apuestas/"+localStorage.getItem('id_partida'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+            
+            if( respuesta.status == "ok" ){
+
+                alert( respuesta.mensaje.length );
+
+                // for para manipular las apuestas por separado
+                for ( var num_apuestas = 0; num_apuestas < respuesta.mensaje.length; num_apuestas++ ){
+                    alert( respuesta.mensaje[num_apuestas] );
+                    /*
+                    $("#"+respuesta.mensaje.valor).empty();
+
+                    $.ajax({
+                        type : "GET",
+                        url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
+
+                        success: function(respuesta){
+                            respuesta = JSON.parse(respuesta);
+                            
+
+                            //$("#"+respuesta.mensaje.valor).append('<img class="ficha" src="img/ficha_'+amarillo+'.png"></img>'); 
+                        },
+                        error: function(respuesta){
+                            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+                        } 
+                    });  
+                    */
+                }              
+            }   
+
+        },
+        error: function(respuesta){
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    }); 
+
+}, 100);
+
+
+
+
+
+
 // Funcion que se encarga de 
 $( "td" ).click(function(e) {   
     var valor = "";

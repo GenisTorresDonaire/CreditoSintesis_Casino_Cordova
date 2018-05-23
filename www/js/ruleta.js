@@ -22,6 +22,8 @@ ruleta();
 
 // BUCLE ONLINE
 setInterval(function(){
+
+    // Llamada para obtener todas las apuestas que se van haciendo
     $.ajax({
         type : "GET",
         url : "https://appcasino.herokuapp.com/api/printar_apuestas/"+localStorage.getItem('id_partida'),     
@@ -29,10 +31,36 @@ setInterval(function(){
         success: function(respuesta){
             respuesta = JSON.parse(respuesta);
             
+            alert( respuesta.status );
+
             if( respuesta.status == "ok" ){
-                alert(JSON.stringify(respuesta));
-            }
-            
+
+                alert( respuesta.mensaje.length );
+
+                // for para manipular las apuestas por separado
+                for ( var num_apuestas = 0; num_apuestas < respuesta.mensaje.length; num_apuestas++ ){
+                    alert( respuesta.mensaje[num_apuestas] );
+                    /*
+                    $("#"+respuesta.mensaje.valor).empty();
+
+                    $.ajax({
+                        type : "GET",
+                        url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
+
+                        success: function(respuesta){
+                            respuesta = JSON.parse(respuesta);
+                            
+
+                            //$("#"+respuesta.mensaje.valor).append('<img class="ficha" src="img/ficha_'+amarillo+'.png"></img>'); 
+                        },
+                        error: function(respuesta){
+                            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+                        } 
+                    });  
+                    */
+                }              
+            }   
+
         },
         error: function(respuesta){
             console.log( "erroor ----> " + JSON.stringify(respuesta) );
