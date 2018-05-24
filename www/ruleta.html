@@ -180,7 +180,8 @@
                             // Aqui se le da la vuelta al array para poder obtener los del final mas comodamente.
                             arrayDiezNum.reverse();
 
-                            $('#insertarTDsNumero').empty();
+                            $('#insertarTDsNumero').empty(); // Empty tiene que estar dentro de la llamada, la callback es muy lenta y se ven parpadeos
+
                             // If para controlar si tiene menos de diez numeros
                             if ( arrayDiezNum.length < 10 ){
                                 // For que obtiene todos los numeros una vez separados
