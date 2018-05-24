@@ -1,3 +1,5 @@
+$arrayNumerosRuletaColores = { 0:'verde',32:'rojo',15:'negro',19:'rojo',4:'negro',21:'rojo',2:'negro',25:'rojo',17:'negro',34:'rojo',6:'negro',27:'rojo',13:'negro',36:'rojo',11:'negro',30:'rojo',8:'negro',32:'rojo',10:'negro',5:'rojo',24:'negro',16:'rojo',33:'negro',1:'rojo',20:'negro',14:'rojo',31:'negro',9:'rojo',22:'rojo',18:'rojo',29:'negro',7:'rojo',28:'negro',12:'rojo',35:'negro',3:'rojo',26:'negro'};
+
 // VARIABLES INICIALIZADAS
 var alfa = 2*Math.PI/37;    // Calculo de cuantos PI ocupara 
 var radio = 140;
@@ -8,6 +10,7 @@ var alfaAnterior = 0;
 var alfaAnteriorLetras = 0;
 var angulo = 0;
 var id_accion = -1;
+var numeroGanador;
 
 // Creacion del canvas
 var elemento = document.getElementById("canvas");
@@ -35,40 +38,44 @@ setInterval(function(){
 
                 // for para manipular las apuestas por separado
                 for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
-                    //alert( JSON.stringify(respuesta[0].mensaje[num_apuestas]) );
-                    
-                    
-                    
+                    var id_jugador = respuesta[0].mensaje[num_apuestas].id_usuario;
+                    var valor_apuesta = respuesta[0].mensaje[num_apuestas].valor;
+
                     $.ajax({
                         type : "GET",
                         url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
 
                         success: function(respuesta_color){
                             respuesta_colores = JSON.parse(respuesta_color);
-                            
-                            $("#"+respuesta[0].mensaje[num_apuestas].valor).empty();
-                            
-                            alert( JSON.stringify(respuesta_colores) );
+                                
+                            if ( respuesta_colores[0].status == "ok"){
 
-                            //$("#"+respuesta[0].mensaje[num_apuestas].valor).append('<img class="ficha" src="img/ficha_'+amarillo+'.png"></img>'); 
+                                // For para obtener todos los colores asignados en la sala, y ir mirando uno a uno
+                                for ( var numeroDatos = 0; numeroDatos < respuesta_colores[0].mensaje.length ; numeroDatos++ ){    
+                                        
+                                    // if para comprobar que el usuario de la apuesta sea el mismo que el de colores, y asi coger su color.
+                                    if ( respuesta_colores[0].mensaje[numeroDatos].id_usuario == id_jugador ){
+                                        $("#"+valor_apuesta).empty();
+                                        // Insercion de la ficha en la celda con el color del usuario
+                                        $("#"+valor_apuesta).prepend('<img class="ficha" src="img/ficha_'+respuesta_colores[0].mensaje[numeroDatos].color+'.png"></img>'); 
+                                    }
+                                }
+                            }
+                            //alert( JSON.stringify(respuesta_colores) );   
                         },
                         error: function(respuesta_color){
-                            alert( "erroor ----> " + JSON.stringify(respuesta_color) );
+                            console.log( "erroor color_usuario ----> " + JSON.stringify(respuesta_color) );
                         } 
-                    });  
-                    
+                    });
                 }              
-            }   
-
+            }
         },
         error: function(respuesta){
-            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+            console.log( "erroor printar_apuestas ----> " + JSON.stringify(respuesta) );
         } 
     }); 
 
-}, 100);
-
-
+}, 2000);
 
 
 
@@ -157,7 +164,7 @@ function animacionMostrarNumero(){
     triangulo(); 
     //angulo = angulo - 0.017;
     angulo = angulo - 0.034;
-    numeroGanador = 30;
+    //numeroGanador = 30;
     printarResultadoRuleta(angulo, numeroGanador);
     triangulo();
 }
@@ -367,14 +374,46 @@ function girarRuleta () {
     clearInterval(id_accion);
     $('#labelTiempo').text("00:00");
 
-    // Llamada a girar ruleta
-    // Llamada solicitar numero
-
-    test_girar();
-
     /*
     *   LLamar a la funcion que generara el numero random
     */
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/numero_random/"+localStorage.getItem('id_partida'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+            
+            if ( respuesta.status == 'ok'){
+                var numero = respuesta.numeros[0].ultimos_numeros;
+                var arrayNumero = numero.split("-");
+                var ultimo = arrayNumero.length;
+                numeroGanador = arrayNumero[ultimo-1];
+
+                localStorage.setItems('numeroGanador', numeroGanador);
+            }
+        },
+        error: function(respuesta){
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    });  
+
+    // Llamada a girar con numero
+    test_girar(); 
+
+    // Funcion que se encarga de repartir las ganancias
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItems('numeroGanador'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+                    
+        },
+        error: function(respuesta){
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    });  
 
 
 }

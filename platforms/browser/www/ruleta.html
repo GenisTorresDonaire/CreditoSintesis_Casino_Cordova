@@ -138,47 +138,93 @@
         <script type="text/javascript" src="js/script.js"></script>  
         <script type="text/javascript" src="js/ruleta.js"></script>   
 
+
         <script>
+            printarCreditos();
+            printarNumeros();
+
+            function printarCreditos(){
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+
+                        if( respuesta[0].status == 'ok' ){
+                            localStorage.setItem('creditos', respuesta[0].creditos);
+                            $('#creditosUsuario').text(localStorage.getItem('creditos'));
+                        }
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor creditos ----> " + JSON.stringify(respuesta) );
+                    } 
+                });
+            }
+
+            function printarNumeros(){
+                
+
+                //Funcion para printar los ultimos 10 numeros
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/ultimos_diez_numeros/"+localStorage.getItem('id_partida'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                        
+                        if( respuesta.status == 'ok' ){
+                            var array = respuesta.mensaje;
+                            // Separacion de la string por - para obtener los numeros y manipularlos uno a uno
+                            var arrayDiezNum = array.split("-");
+                            // Aqui se le da la vuelta al array para poder obtener los del final mas comodamente.
+                            arrayDiezNum.reverse();
+
+                            $('#insertarTDsNumero').empty();
+                            // If para controlar si tiene menos de diez numeros
+                            if ( arrayDiezNum.length < 10 ){
+                                // For que obtiene todos los numeros una vez separados
+                                for ( var cantidadNumeros = 0; cantidadNumeros < arrayDiezNum.length; cantidadNumeros++ ){
+                                
+                                    var color = $arrayNumerosRuletaColores[arrayDiezNum[cantidadNumeros]];
+                                    // Ifs para cambiar el coger el nombre y hacer el cambio de español a ingles.
+                                    if ( color == 'rojo' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: red;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'verde' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: green;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'negro' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: black;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }   
+                                }     
+                            }
+                            // si tiene mas de 10 numeros solo obtendremos los 10 ultimos
+                            else{
+                                // For que obtiene todos los numeros una vez separados
+                                for( var cantidadNumeros = 0; cantidadNumeros < 10; cantidadNumeros++ ){
+                                    var color = $arrayNumerosRuletaColores[arrayDiezNum[cantidadNumeros]];
+                                    // Ifs para cambiar el coger el nombre y hacer el cambio de español a ingles.
+                                    if ( color == 'rojo' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: red;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'verde' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: green;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'negro' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: black;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }
+                                }
+                            }
+                        }          
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            }
+
+
             setInterval(function(){
-                $.ajax({
-                    type : "GET",
-                    url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
-
-                    success: function(respuesta){
-                        respuesta = JSON.parse(respuesta);
-
-                        if( respuesta[0].status == 'ok' ){
-                            localStorage.setItem('creditos', respuesta[0].creditos);
-                            $('#creditosUsuario').text(localStorage.getItem('creditos'));
-                        }
-                    },
-                    error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
-                    } 
-                });
-
-
-                $.ajax({
-                    type : "GET",
-                    url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
-
-                    success: function(respuesta){
-                        respuesta = JSON.parse(respuesta);
-
-                        if( respuesta[0].status == 'ok' ){
-                            localStorage.setItem('creditos', respuesta[0].creditos);
-                            $('#creditosUsuario').text(localStorage.getItem('creditos'));
-                        }
-                    },
-                    error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
-                    } 
-                });
-
-
-
+                printarCreditos();
+                printarNumeros();
             }, 1000);
-
 
 
         </script>
