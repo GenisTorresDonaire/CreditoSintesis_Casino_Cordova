@@ -142,6 +142,7 @@
         <script>
             printarCreditos();
             printarNumeros();
+            printarApuestas();
 
             function printarCreditos(){
                 $.ajax({
@@ -163,8 +164,6 @@
             }
 
             function printarNumeros(){
-                
-
                 //Funcion para printar los ultimos 10 numeros
                 $.ajax({
                     type : "GET",
@@ -221,10 +220,62 @@
                 }); 
             }
 
+            function printarApuestas(){
+                // Llamada para obtener todas las apuestas que se van haciendo
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/printar_apuestas/"+localStorage.getItem('id_partida'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                        
+                        if( respuesta[0].status == "ok" ){
+
+                            // for para manipular las apuestas por separado
+                            for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
+                                var id_jugador = respuesta[0].mensaje[num_apuestas].id_usuario;
+                                var valor_apuesta = respuesta[0].mensaje[num_apuestas].valor;
+
+                                $.ajax({
+                                    type : "GET",
+                                    url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
+
+                                    success: function(respuesta_color){
+                                        respuesta_colores = JSON.parse(respuesta_color);
+                                            
+                                        if ( respuesta_colores[0].status == "ok"){
+
+                                            // For para obtener todos los colores asignados en la sala, y ir mirando uno a uno
+                                            for ( var numeroDatos = 0; numeroDatos < respuesta_colores[0].mensaje.length ; numeroDatos++ ){    
+                                                    
+                                                // if para comprobar que el usuario de la apuesta sea el mismo que el de colores, y asi coger su color.
+                                                if ( respuesta_colores[0].mensaje[numeroDatos].id_usuario == id_jugador ){
+                                                    $("#"+valor_apuesta).empty();
+                                                    // Insercion de la ficha en la celda con el color del usuario
+                                                    $("#"+valor_apuesta).prepend('<img class="ficha" src="img/ficha_'+respuesta_colores[0].mensaje[numeroDatos].color+'.png"></img>'); 
+                                                }
+                                            }
+                                        }
+                                        //alert( JSON.stringify(respuesta_colores) );   
+                                    },
+                                    error: function(respuesta_color){
+                                        console.log( "erroor color_usuario ----> " + JSON.stringify(respuesta_color) );
+                                    } 
+                                });
+                            }              
+                        }
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor printar_apuestas ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            }
+
 
             setInterval(function(){
                 printarCreditos();
                 printarNumeros();
+                printarApuestas();
             }, 1000);
 
 

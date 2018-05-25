@@ -10,75 +10,21 @@ var alfaAnterior = 0;
 var alfaAnteriorLetras = 0;
 var angulo = 0;
 var id_accion = -1;
+var control = -1;
+var id_test_tirar = -1;
 var numeroGanador;
+
 
 // Creacion del canvas
 var elemento = document.getElementById("canvas");
 var lienzo = elemento.getContext("2d");  
 
 
-ruleta();
+//ruleta();
 
-
+inicio();
 
 // ============================================ Ruleta =========================================
-
-// BUCLE ONLINE
-setInterval(function(){
-
-    // Llamada para obtener todas las apuestas que se van haciendo
-    $.ajax({
-        type : "GET",
-        url : "https://appcasino.herokuapp.com/api/printar_apuestas/"+localStorage.getItem('id_partida'),     
-
-        success: function(respuesta){
-            respuesta = JSON.parse(respuesta);
-            
-            if( respuesta[0].status == "ok" ){
-
-                // for para manipular las apuestas por separado
-                for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
-                    var id_jugador = respuesta[0].mensaje[num_apuestas].id_usuario;
-                    var valor_apuesta = respuesta[0].mensaje[num_apuestas].valor;
-
-                    $.ajax({
-                        type : "GET",
-                        url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
-
-                        success: function(respuesta_color){
-                            respuesta_colores = JSON.parse(respuesta_color);
-                                
-                            if ( respuesta_colores[0].status == "ok"){
-
-                                // For para obtener todos los colores asignados en la sala, y ir mirando uno a uno
-                                for ( var numeroDatos = 0; numeroDatos < respuesta_colores[0].mensaje.length ; numeroDatos++ ){    
-                                        
-                                    // if para comprobar que el usuario de la apuesta sea el mismo que el de colores, y asi coger su color.
-                                    if ( respuesta_colores[0].mensaje[numeroDatos].id_usuario == id_jugador ){
-                                        $("#"+valor_apuesta).empty();
-                                        // Insercion de la ficha en la celda con el color del usuario
-                                        $("#"+valor_apuesta).prepend('<img class="ficha" src="img/ficha_'+respuesta_colores[0].mensaje[numeroDatos].color+'.png"></img>'); 
-                                    }
-                                }
-                            }
-                            //alert( JSON.stringify(respuesta_colores) );   
-                        },
-                        error: function(respuesta_color){
-                            console.log( "erroor color_usuario ----> " + JSON.stringify(respuesta_color) );
-                        } 
-                    });
-                }              
-            }
-        },
-        error: function(respuesta){
-            console.log( "erroor printar_apuestas ----> " + JSON.stringify(respuesta) );
-        } 
-    }); 
-
-}, 2000);
-
-
-
 
 // Funcion que se encarga de 
 $( "td" ).click(function(e) {   
@@ -245,18 +191,8 @@ function girar(beta, numeroGanador){
         lienzo.fillStyle = 'white';
         lienzo.font = '20pt';
         lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal);
-        
-        //alert(alfaAnterior);
-        // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba              // 4.71 punto centrico de la circunferencia
-        if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+beta)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+beta))==true ){
-        // si el numero ganador es el mismo que el que esta arriba del todo.. 
-            if ( (numeroGanador == arrayNumero[numeroCeldas-1]) == true ){
-                //alert("->22");
-                clearInterval(id_accion);
-            }
-        }
-
         lienzo.stroke();
+        
         alfaAnterior = (alfa*numeroCeldas)+beta;
         alfaAnteriorLetras = (alfa*numeroCeldas)+beta;
     }
@@ -333,13 +269,14 @@ function limpiarCanvas(){
 
 // =================================================    TIEMPO  ===============================================
 //var segundos = 60;
-var segundos = 5;
+var segundos = 15;
 var minutos = 0;
 
-inicio();
 
-function inicio () {
+
+function inicio() {
     control = setInterval(cronometro,1000);
+    id_accion = setInterval(animacionGiro, 10);
 }
 
 function cronometro () { 
@@ -359,14 +296,15 @@ function cronometro () {
     $('#labelTiempo').text("0"+minutos+":"+segundos);
 }
 
+/*
 function reinicio () {
     clearInterval(control);
     //segundos = 60;
-    segundos = 5;
+    segundos = 15;
     minutos = 0;
-    $('#labelTiempo').text("00:00");
+    //$('#labelTiempo').text("00:00");
 }
-
+*/
 
 // Una vez acabado el tiempo, se solicitara
 function girarRuleta () {
@@ -374,9 +312,7 @@ function girarRuleta () {
     clearInterval(id_accion);
     $('#labelTiempo').text("00:00");
 
-    /*
-    *   LLamar a la funcion que generara el numero random
-    */
+    // LLamar a la funcion que generara el numero random
     $.ajax({
         type : "GET",
         url : "https://appcasino.herokuapp.com/api/numero_random/"+localStorage.getItem('id_partida'),     
@@ -390,7 +326,7 @@ function girarRuleta () {
                 var ultimo = arrayNumero.length;
                 numeroGanador = arrayNumero[ultimo-1];
 
-                localStorage.setItems('numeroGanador', numeroGanador);
+                localStorage.setItem('numeroGanador', numeroGanador);
             }
         },
         error: function(respuesta){
@@ -404,154 +340,19 @@ function girarRuleta () {
     // Funcion que se encarga de repartir las ganancias
     $.ajax({
         type : "GET",
-        url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItems('numeroGanador'),     
+        url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador'),     
 
         success: function(respuesta){
             respuesta = JSON.parse(respuesta);
-                    
+
+            minutos = 0;
+            segundos = 15;
+            setTimeout(inicio, 8000);   
+
         },
         error: function(respuesta){
-            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+            console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
         } 
     });  
 
-
 }
-
-
-
-
-
-
-/*
-    // insercion de la ficha
-    $("#"+this.id).empty();
-    $("#"+this.id).append('<img class="ficha" src="img/ficha_amarillo.png"></img>');
-
-    alert(this.id);
-    alert($('#'+this.id).attr('class'));
-*/
-
-
-/*
-
-function printarRuleta(){ 
-    // for para dividir 
-    for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
-       
-        // Creacion del arco de cada celda
-        lienzo.beginPath();
-        lienzo.arc(200, 250, radio, alfaAnterior, alfa*numeroCeldas);
-
-        // Eleccion del color
-        if ( numeroCeldas == 1){
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "green";
-        }
-        else if ( ((numeroCeldas % 2) == 0) == true ){
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "red";
-        }
-        else{
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "black";
-        }
-     
-        lienzo.stroke();
-        alfaAnterior = alfa*numeroCeldas;
-    }
-}
-
-
-function printarNumerosRuleta(){
-    var arrayNumero = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,32,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-    //alert(arrayNumero[0]);
-    
-    alfaAnterior =0;
-
-    // for para dividir 
-    for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
-        alfaAnterior = alfaAnterior + (alfa/2);
-        
-        y = Math.sin(alfaAnterior)*radio;
-        x = Math.cos(alfaAnterior)*radio;
-
-        // Creacion del arco de cada celda
-        lienzo.beginPath();
-        
-        var xfinal = x+(200-5);
-        var yfinal = y+(250+5);
-        
-        lienzo.fillStyle = 'white';
-        lienzo.font = '20pt';
-        lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal); 
-
-        lienzo.stroke();
-        alfaAnterior = alfa*numeroCeldas;
-    }
-}
-
-
-function girar(beta){
-    alfaAnterior = beta;
-    
-    // for para dividir 
-    for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
-        
-        // Creacion del arco de cada celda
-        lienzo.beginPath();
-        lienzo.arc(200, 250, radio, alfaAnterior, (alfa*numeroCeldas)+beta );
-
-        // Eleccion del color
-        if ( numeroCeldas == 1){
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "green";
-        }
-        else if ( ((numeroCeldas % 2) == 0) == true ){
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "red";
-        }
-        else{
-            lienzo.lineWidth = 80;
-            lienzo.strokeStyle = "black";
-        }
-     
-        lienzo.stroke();
-        alfaAnterior = (alfa*numeroCeldas)+beta;
-    }
-
-    printarNumerosRuleta(beta);
-}
-
-function printarNumerosRuleta(beta){
-    var arrayNumero = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,32,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-    //alert(arrayNumero[0]);
-    
-    alfaAnterior = beta;
-
-    // for para dividir 
-    for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
-        alfaAnterior = alfaAnterior + (alfa/2);
-        
-        alert("alfaAnterior: "+alfaAnterior + ", alfa: "+ alfa );
-
-        y = Math.sin(alfaAnterior)*radio;
-        x = Math.cos(alfaAnterior)*radio;
-
-        // Creacion del arco de cada celda
-        lienzo.beginPath();
-
-        //alert( alfaAnterior );
-        
-        var xfinal = x+(200-5);
-        var yfinal = y+(250+5);
-        
-        lienzo.fillStyle = 'white';
-        lienzo.font = '20pt';
-        lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal); 
-
-        lienzo.stroke();
-        alfaAnterior = (alfa*numeroCeldas)+beta;
-    }
-}
-*/
