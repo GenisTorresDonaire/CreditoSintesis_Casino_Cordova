@@ -52,7 +52,7 @@ $( "#ir_tienda" ).click(function() {
 });
 
 $( "#ir_ajustes" ).click(function() { 
-  alert("ajustes");
+  
 });
 
 

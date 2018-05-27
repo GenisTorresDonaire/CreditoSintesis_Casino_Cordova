@@ -39,6 +39,7 @@ var lienzo = elemento.getContext("2d");
 //ruleta();
 
 inicio();
+$("#menuAjustes").hide();
 
 // ============================================ Ruleta =========================================
 
@@ -98,6 +99,29 @@ $( "td" ).click(function(e) {
             } 
         }); 
     }
+});
+
+
+// Evento para abrir el menu de salir de la room
+$('#ir_ajustes').click(function(e) { 
+    $("#menuAjustes").show();
+});
+
+// Ajax para salir de la room
+$('#salirSala').click(function(e) { 
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/salirRoomRuleta/"+localStorage.getItem('token'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+            
+            window.location.replace("listado.html");
+        },
+        error: function(respuesta){
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    }); 
 });
 
 /*
@@ -245,7 +269,8 @@ function girar(){
         }
         */
 
-        //console.log("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
+        //alert("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
+        
 
         //alert( alfaAnterior + " --- " + ((alfa*numeroCeldas)+angulo) );
         //console.log("AlfaInicio: " + alfaAnterior + " ---- AlfaFinal: " + ((alfa*numeroCeldas)+angulo) );
@@ -258,17 +283,14 @@ function girar(){
             // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba  (4.71 punto centrico de la circunferencia)
             if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+angulo)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+angulo))==true  || (-14.21 >= alfaAnterior && -14.21 <= ((alfa*numeroCeldas)+angulo)) ){                   
                 
-                //console.log(arrayNumero[numeroCeldas-1]);
-
                 // si el numero ganador es el mismo que el que esta arriba del todo.. 
                 if ( (numeroGanador == arrayNumero[numeroCeldas-1]) == true ){
 
                     // Parara la animacion de girar
                     clearInterval(id_accion); 
-
-                    alert( "vueltasDadas: " + vueltasDadas + " --- " + ultimoAlfaInicial0 + " --- " + ultimoAlfaFinal0 );
-
-                    setTimeout(inicio, 8000);
+            
+                    //alert( ultimoAlfaInicial0 + " --- " + ultimoAlfaFinal0 );
+                    //setTimeout(inicio, 8000);
                 }
             }
         }
