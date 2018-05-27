@@ -1,19 +1,35 @@
+var ultimoAlfaInicial0;
+var ultimoAlfaFinal0;
+
+var vueltasDadas = 0;
+
 $arrayNumerosRuletaColores = { 0:'verde',32:'rojo',15:'negro',19:'rojo',4:'negro',21:'rojo',2:'negro',25:'rojo',17:'negro',34:'rojo',6:'negro',27:'rojo',13:'negro',36:'rojo',11:'negro',30:'rojo',8:'negro',32:'rojo',10:'negro',5:'rojo',24:'negro',16:'rojo',33:'negro',1:'rojo',20:'negro',14:'rojo',31:'negro',9:'rojo',22:'rojo',18:'rojo',29:'negro',7:'rojo',28:'negro',12:'rojo',35:'negro',3:'rojo',26:'negro'};
 
 // VARIABLES INICIALIZADAS
 var alfa = 2*Math.PI/37;    // Calculo de cuantos PI ocupara 
 var radio = 140;
-//var numeroApuntado;
+var beta;
+
 var y = 0;
 var x = 0;
 var alfaAnterior = 0;
 var alfaAnteriorLetras = 0;
-var angulo = 0;
+
+// Intervalos
 var id_accion = -1;
 var control = -1;
 var id_test_tirar = -1;
-var numeroGanador;
 
+// Numero premiado
+var numeroGanador = -1;
+
+// Angulos
+var angulo = 0;
+var nuevoAngulo = -1;
+
+// Variables cronometro
+var segundos = 15;
+var minutos = 0;
 
 // Creacion del canvas
 var elemento = document.getElementById("canvas");
@@ -84,27 +100,42 @@ $( "td" ).click(function(e) {
     }
 });
 
-
+/*
 // function 
 function ruleta(){
     id_accion = setInterval(animacionGiro, 10);
 }
+*/
 
+/*
 function test_girar(){
     id_test_tirar = setInterval(animacionMostrarNumero, 10);
 }
+*/
 
 
 function animacionGiro(){
     limpiarCanvas();
     crearBordeNaranja();
-    triangulo(); 
-    angulo = angulo - 0.01;
-    girar(angulo);
+    
+    //console.log(nuevoAngulo);
+
+    if ( nuevoAngulo == -1 ){
+        //console.log("if");
+        angulo = angulo - 0.01;
+        //angulo = angulo - 0.034;
+    }else{
+        //console.log("else");
+        angulo = angulo - nuevoAngulo;
+    }
+    
+
+    girar();
     triangulo();
 }
 
-function animacionMostrarNumero(){
+/*
+function animacionMostrarNumero(angulo){
     limpiarCanvas();
     crearBordeNaranja();
     triangulo(); 
@@ -114,6 +145,7 @@ function animacionMostrarNumero(){
     printarResultadoRuleta(angulo, numeroGanador);
     triangulo();
 }
+*/
 
 function triangulo(){
     lienzo.beginPath();
@@ -150,17 +182,19 @@ function crearBordeNaranja(){
 }
 
 
-function girar(beta, numeroGanador){
+function girar(){
+    //console.log(numeroGanador);
+
     var arrayNumero = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,32,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-    alfaAnterior = beta;
-    alfaAnteriorLetras = beta;
+    alfaAnterior = angulo;
+    alfaAnteriorLetras = angulo;
 
     // for para dividir la circunferencia en 37 porciones
     for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
         
         // Creacion del arco de cada celda
         lienzo.beginPath();
-        lienzo.arc(200, 250, radio, alfaAnterior, (alfa*numeroCeldas)+beta );
+        lienzo.arc(200, 250, radio, alfaAnterior, (alfa*numeroCeldas)+angulo );
 
         // Eleccion del color
         if ( numeroCeldas == 1){
@@ -178,27 +212,163 @@ function girar(beta, numeroGanador){
      
         lienzo.stroke();
 
+        // Printar Numeros
+        // Se le suma la division para obtener la midad, asi al sumas se desplaza del inicio, quedandose en medio del borde
         alfaAnteriorLetras = alfaAnteriorLetras + (alfa/2);
         y = Math.sin(alfaAnteriorLetras)*radio;
         x = Math.cos(alfaAnteriorLetras)*radio;
 
         // Creacion del arco de cada celda
         lienzo.beginPath();
-
+        // inicio y fin del arco donde se añadira el numero ( a xfinal se le suma la mitad de x, y a yfinal se le suma la mitad de y, asi obtendra como punto inicial el centro de la ruleta)
         var xfinal = x+(200-5);
         var yfinal = y+(250+5);
 
+        // Estilos
         lienzo.fillStyle = 'white';
         lienzo.font = '20pt';
+
+        // Se añade el numero que toca en esa posicion
         lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal);
         lienzo.stroke();
+
+        if( arrayNumero[numeroCeldas-1] == 0 ){
+            ultimoAlfaInicial0 = alfaAnterior;
+            ultimoAlfaFinal0 = ((alfa*numeroCeldas)+angulo);
+        }
+
+        /*
+        if( arrayNumero[numeroCeldas-1] == 0 && (-6.314 >= alfaAnterior && -6.314 <= ((alfa*numeroCeldas)+angulo)) ){
+            alert( "ha dado la vuelta" );
+            alfaAnterior = angulo;
+            alfaAnteriorLetras = angulo;
+        }
+        */
+
+        //console.log("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
+
+        //alert( alfaAnterior + " --- " + ((alfa*numeroCeldas)+angulo) );
+        //console.log("AlfaInicio: " + alfaAnterior + " ---- AlfaFinal: " + ((alfa*numeroCeldas)+angulo) );
+
+        // Si hay un numero ganador lo buscara sino seguira girando
+        if ( numeroGanador != -1 ){
+
+            //console.log("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
+
+            // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba  (4.71 punto centrico de la circunferencia)
+            if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+angulo)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+angulo))==true  || (-14.21 >= alfaAnterior && -14.21 <= ((alfa*numeroCeldas)+angulo)) ){                   
+                
+                //console.log(arrayNumero[numeroCeldas-1]);
+
+                // si el numero ganador es el mismo que el que esta arriba del todo.. 
+                if ( (numeroGanador == arrayNumero[numeroCeldas-1]) == true ){
+
+                    // Parara la animacion de girar
+                    clearInterval(id_accion); 
+
+                    alert( "vueltasDadas: " + vueltasDadas + " --- " + ultimoAlfaInicial0 + " --- " + ultimoAlfaFinal0 );
+
+                    setTimeout(inicio, 8000);
+                }
+            }
+        }
         
-        alfaAnterior = (alfa*numeroCeldas)+beta;
-        alfaAnteriorLetras = (alfa*numeroCeldas)+beta;
+        alfaAnterior = (alfa*numeroCeldas)+angulo;
+        alfaAnteriorLetras = (alfa*numeroCeldas)+angulo;
     }
 }
 
 
+function limpiarCanvas(){
+    var anchura_canvas = $('#canvas').width();
+    var altura_canvas = $('#canvas').height();
+    lienzo.clearRect(0, 0, anchura_canvas, altura_canvas);
+}
+
+
+// =================================================    TIEMPO  ===============================================
+//var segundos = 60;
+
+
+function inicio() {
+    nuevoAngulo = -1;
+    numeroGanador = -1;
+
+    minutos = 0;
+    segundos = 15;
+    $('#labelTiempo').text("0"+minutos+":"+segundos);
+
+    //clearInterval(id_test_tirar);
+    control = setInterval(cronometro,1000);
+    id_accion = setInterval(animacionGiro, 10);
+}
+
+function cronometro () { 
+    if( segundos > 0){
+        segundos--;
+        if (segundos < 10) { segundos = "0"+segundos }
+    }
+    if (segundos == 0) {
+        //segundos = 60;
+        clearInterval(control);
+        $('#labelTiempo').text("00:00");
+        girarRuleta(); 
+    }
+    if (minutos > 0) {
+        minutos--;
+        if (minutos < 10) { minutos = "0"+minutos }
+    }
+        
+    $('#labelTiempo').text("0"+minutos+":"+segundos);
+}
+
+
+// Una vez acabado el tiempo, se solicitara
+function girarRuleta () { 
+    // LLamar a la funcion que generara el numero random
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/numero_random/"+localStorage.getItem('id_partida'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+            
+            if ( respuesta.status == 'ok'){
+                var numero = respuesta.numeros[0].ultimos_numeros;
+                var arrayNumero = numero.split("-");
+                var ultimo = arrayNumero.length;
+                numeroGanador = arrayNumero[ultimo-1];
+
+                localStorage.setItem('numeroGanador', numeroGanador);
+ 
+                nuevoAngulo = 0.034;
+
+                // Funcion que se encarga de repartir las ganancias
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
+                    } 
+                });  
+
+
+            }
+        },
+        error: function(respuesta){
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    });  
+}
+
+
+
+
+/*
 function printarResultadoRuleta(beta, numeroGanador){
     //alert("printarResultadoRuleta");
 
@@ -243,9 +413,8 @@ function printarResultadoRuleta(beta, numeroGanador){
         lienzo.font = '20pt';
         lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal);
             
-        //alert(alfaAnterior + " numeroGanador:" + numeroGanador);
-        // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba              // 4.71 punto centrico de la circunferencia
-        //if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+beta)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+beta))==true ){
+        
+        // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba  (4.71 punto centrico de la circunferencia)
         if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+beta)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+beta))==true  || (-14.21 >= alfaAnterior && -14.21 <= ((alfa*numeroCeldas)+beta)) ){                   
             // si el numero ganador es el mismo que el que esta arriba del todo.. 
             if ( (numeroGanador == arrayNumero[numeroCeldas-1]) == true ){
@@ -258,101 +427,4 @@ function printarResultadoRuleta(beta, numeroGanador){
         alfaAnteriorLetras = (alfa*numeroCeldas)+beta;
     }
 }
-
-function limpiarCanvas(){
-    //lienzo.clearRect(0, 0, 400, 500);
-    var anchura_canvas = $('#canvas').width();
-    var altura_canvas = $('#canvas').height();
-    lienzo.clearRect(0, 0, anchura_canvas, altura_canvas);
-}
-
-
-// =================================================    TIEMPO  ===============================================
-//var segundos = 60;
-var segundos = 15;
-var minutos = 0;
-
-
-
-function inicio() {
-    control = setInterval(cronometro,1000);
-    id_accion = setInterval(animacionGiro, 10);
-}
-
-function cronometro () { 
-    if( segundos > 0){
-        segundos--;
-        if (segundos < 10) { segundos = "0"+segundos }
-    }
-    if (segundos == 0) {
-        //segundos = 60;
-        girarRuleta(); 
-    }
-    if (minutos > 0) {
-        minutos--;
-        if (minutos < 10) { minutos = "0"+minutos }
-    }
-        
-    $('#labelTiempo').text("0"+minutos+":"+segundos);
-}
-
-/*
-function reinicio () {
-    clearInterval(control);
-    //segundos = 60;
-    segundos = 15;
-    minutos = 0;
-    //$('#labelTiempo').text("00:00");
-}
 */
-
-// Una vez acabado el tiempo, se solicitara
-function girarRuleta () {
-    clearInterval(control);
-    clearInterval(id_accion);
-    $('#labelTiempo').text("00:00");
-
-    // LLamar a la funcion que generara el numero random
-    $.ajax({
-        type : "GET",
-        url : "https://appcasino.herokuapp.com/api/numero_random/"+localStorage.getItem('id_partida'),     
-
-        success: function(respuesta){
-            respuesta = JSON.parse(respuesta);
-            
-            if ( respuesta.status == 'ok'){
-                var numero = respuesta.numeros[0].ultimos_numeros;
-                var arrayNumero = numero.split("-");
-                var ultimo = arrayNumero.length;
-                numeroGanador = arrayNumero[ultimo-1];
-
-                localStorage.setItem('numeroGanador', numeroGanador);
-            }
-        },
-        error: function(respuesta){
-            console.log( "erroor ----> " + JSON.stringify(respuesta) );
-        } 
-    });  
-
-    // Llamada a girar con numero
-    test_girar(); 
-
-    // Funcion que se encarga de repartir las ganancias
-    $.ajax({
-        type : "GET",
-        url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador'),     
-
-        success: function(respuesta){
-            respuesta = JSON.parse(respuesta);
-
-            minutos = 0;
-            segundos = 15;
-            setTimeout(inicio, 8000);   
-
-        },
-        error: function(respuesta){
-            console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
-        } 
-    });  
-
-}
