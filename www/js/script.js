@@ -39,7 +39,7 @@ $( "#logear" ).click(function() {
 * MENU
 */
 $( "#ir_blackjack" ).click(function() { 
-  alert("blackjack");
+  window.location.replace("lista_bj.html");
 });
 
 $( "#ir_ruleta" ).click(function() { 

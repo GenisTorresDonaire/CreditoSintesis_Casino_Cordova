@@ -61,7 +61,7 @@ $( "td" ).click(function(e) {
         //alert( "tipo: " + tipo + " valor: " + valor );
 
         //alert( $('#creditosApuesta').val() );
-        alert( "------> URL: " + "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val() );
+        //alert( "------> URL: " + "https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val() );
 
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
