@@ -148,19 +148,6 @@ h1 {
     background-color: #006bb3;
 }
 
-
-.rombo {
-    width: 30px; 
-    height: 30px; 
-    border: 3px solid black; 
-    background: #EC5463;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
-
 .ficha{
     height: 35px; 
     width: 35px;
@@ -168,10 +155,10 @@ h1 {
 
 .reloj{
     text-align: center; 
-    font-size: 40px; 
+    font-size: 25px; 
     font-family: Courier,sans-serif;
     color: #363431;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 
@@ -183,7 +170,7 @@ h1 {
     border-radius: 10px;
     -moz-appearance:textfield;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .numerosAnteriores{
@@ -201,18 +188,41 @@ h1 {
     height: 50px; 
     width: 50px; 
     text-align: center; 
-    border: 1px solid black;
+    border: 1px solid white;
 }
 
 .numerosAnteriores{
     width: 500px;
-    height: 50px;
-    border: 2px solid grey;
+    height: 55px;
     margin-top: 10px;
     margin-left: 15%;   
 }
 
+<<<<<<< HEAD
 .carta {
     border-color: black;
     border-style: solid;
+=======
+#salirSala {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+#salirSala:hover {background-color: #3e8e41}
+
+#salirSala:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+>>>>>>> a304d7ed0b3db9e5300e5815c8f780e9735f5cc9
 }

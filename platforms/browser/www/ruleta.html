@@ -14,6 +14,12 @@
         <title>Casino World</title>
     </head>
     <body>
+        <div id="menuAjustes" style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding: 10px 10px;">
+            <div style="background-color: white; position: absolute; top: 50%; left: 50%; margin: 0; transform: translate(-50%,-50%); height: 200px; width: 300px; text-align: center; border-radius: 10px;">
+                <button id="salirSala" style="border-radius: 8px; padding: 14px 40px; font-size: 16px; margin-top: 50px;">Salir de la room</button>     
+            </div>  
+        </div>
+
         <div class="app" style="visibility: hidden;">
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
@@ -138,8 +144,14 @@
         <script type="text/javascript" src="js/script.js"></script>  
         <script type="text/javascript" src="js/ruleta.js"></script>   
 
+
         <script>
-            setInterval(function(){
+            var interval = -1;
+            printarCreditos();
+            printarNumeros();
+            printarApuestas();
+
+            function printarCreditos(){
                 $.ajax({
                     type : "GET",
                     url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
@@ -153,35 +165,128 @@
                         }
                     },
                     error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                        console.log( "erroor creditos ----> " + JSON.stringify(respuesta) );
                     } 
                 });
+            }
 
-
+            function printarNumeros(){
+                //Funcion para printar los ultimos 10 numeros
                 $.ajax({
                     type : "GET",
-                    url : "https://appcasino.herokuapp.com/api/creditos/"+localStorage.getItem('token'),     
+                    url : "https://appcasino.herokuapp.com/api/ultimos_diez_numeros/"+localStorage.getItem('id_partida'),     
 
                     success: function(respuesta){
                         respuesta = JSON.parse(respuesta);
+                        
+                        if( respuesta.status == 'ok' ){
+                            var array = respuesta.mensaje;
+                            // Separacion de la string por - para obtener los numeros y manipularlos uno a uno
+                            var arrayDiezNum = array.split("-");
+                            // Aqui se le da la vuelta al array para poder obtener los del final mas comodamente.
+                            arrayDiezNum.reverse();
 
-                        if( respuesta[0].status == 'ok' ){
-                            localStorage.setItem('creditos', respuesta[0].creditos);
-                            $('#creditosUsuario').text(localStorage.getItem('creditos'));
+                            $('#insertarTDsNumero').empty(); // Empty tiene que estar dentro de la llamada, la callback es muy lenta y se ven parpadeos
+
+                            // If para controlar si tiene menos de diez numeros
+                            if ( arrayDiezNum.length < 10 ){
+                                // For que obtiene todos los numeros una vez separados
+                                for ( var cantidadNumeros = 0; cantidadNumeros < arrayDiezNum.length; cantidadNumeros++ ){
+                                
+                                    var color = $arrayNumerosRuletaColores[arrayDiezNum[cantidadNumeros]];
+                                    // Ifs para cambiar el coger el nombre y hacer el cambio de español a ingles.
+                                    if ( color == 'rojo' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: red;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'verde' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: green;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'negro' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: black;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }   
+                                }     
+                            }
+                            // si tiene mas de 10 numeros solo obtendremos los 10 ultimos
+                            else{
+                                // For que obtiene todos los numeros una vez separados
+                                for( var cantidadNumeros = 0; cantidadNumeros < 10; cantidadNumeros++ ){
+                                    var color = $arrayNumerosRuletaColores[arrayDiezNum[cantidadNumeros]];
+                                    // Ifs para cambiar el coger el nombre y hacer el cambio de español a ingles.
+                                    if ( color == 'rojo' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: red;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'verde' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: green;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }else if ( color == 'negro' ){
+                                        $('#insertarTDsNumero').prepend('<td style="color: white; background-color: black;">'+arrayDiezNum[cantidadNumeros]+'</td>');
+                                    }
+                                }
+                            }
+                        }          
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            }
+
+            function printarApuestas(){
+                // Llamada para obtener todas las apuestas que se van haciendo
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/printar_apuestas/"+localStorage.getItem('id_partida'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                        
+                        if( respuesta[0].status == "ok" ){
+
+                            // for para manipular las apuestas por separado
+                            for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
+                                var id_jugador = respuesta[0].mensaje[num_apuestas].id_usuario;
+                                var valor_apuesta = respuesta[0].mensaje[num_apuestas].valor;
+
+                                $.ajax({
+                                    type : "GET",
+                                    url : "https://appcasino.herokuapp.com/api/color_usuario/"+localStorage.getItem('id_partida'),     
+
+                                    success: function(respuesta_color){
+                                        respuesta_colores = JSON.parse(respuesta_color);
+                                            
+                                        if ( respuesta_colores[0].status == "ok"){
+
+                                            // For para obtener todos los colores asignados en la sala, y ir mirando uno a uno
+                                            for ( var numeroDatos = 0; numeroDatos < respuesta_colores[0].mensaje.length ; numeroDatos++ ){    
+                                                    
+                                                // if para comprobar que el usuario de la apuesta sea el mismo que el de colores, y asi coger su color.
+                                                if ( respuesta_colores[0].mensaje[numeroDatos].id_usuario == id_jugador ){
+                                                    $("#"+valor_apuesta).empty();
+                                                    // Insercion de la ficha en la celda con el color del usuario
+                                                    $("#"+valor_apuesta).prepend('<img class="ficha" src="img/ficha_'+respuesta_colores[0].mensaje[numeroDatos].color+'.png"></img>'); 
+                                                }
+                                            }
+                                        }
+                                        //alert( JSON.stringify(respuesta_colores) );   
+                                    },
+                                    error: function(respuesta_color){
+                                        console.log( "erroor color_usuario ----> " + JSON.stringify(respuesta_color) );
+                                    } 
+                                });
+                            }              
                         }
                     },
                     error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                        console.log( "erroor printar_apuestas ----> " + JSON.stringify(respuesta) );
                     } 
-                });
+                }); 
+            }
 
 
-
-            }, 1000);
-
-
-
+            if ( interval == -1 ){
+                interval = setInterval(function(){
+                    printarCreditos();
+                    printarNumeros();
+                    printarApuestas();
+                }, 1000);
+            }
+            
         </script>
-
     </body>
 </html>
