@@ -76,7 +76,7 @@ $( "td" ).click(function(e) {
             valor = this.id;
         }
 
-        
+        alert("https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val());
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
         */
@@ -271,6 +271,7 @@ function girar(){
     }
 }
 
+/*
 function girar2(){
     //console.log(numeroGanador);
 
@@ -351,7 +352,7 @@ function girar2(){
         alfaAnteriorLetras = (alfa*numeroCeldas)+angulo;
     }
 }
-
+*/
 
 
 function limpiarCanvas(){

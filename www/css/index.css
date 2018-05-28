@@ -198,11 +198,12 @@ h1 {
     margin-left: 15%;   
 }
 
-<<<<<<< HEAD
+
 .carta {
     border-color: black;
     border-style: solid;
-=======
+}
+
 #salirSala {
   display: inline-block;
   padding: 15px 25px;
@@ -224,5 +225,4 @@ h1 {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
->>>>>>> a304d7ed0b3db9e5300e5815c8f780e9735f5cc9
 }
