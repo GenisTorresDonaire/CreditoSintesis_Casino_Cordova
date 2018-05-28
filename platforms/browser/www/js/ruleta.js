@@ -1,8 +1,3 @@
-var ultimoAlfaInicial0;
-var ultimoAlfaFinal0;
-
-var vueltasDadas = 0;
-
 $arrayNumerosRuletaColores = { 0:'verde',32:'rojo',15:'negro',19:'rojo',4:'negro',21:'rojo',2:'negro',25:'rojo',17:'negro',34:'rojo',6:'negro',27:'rojo',13:'negro',36:'rojo',11:'negro',30:'rojo',8:'negro',32:'rojo',10:'negro',5:'rojo',24:'negro',16:'rojo',33:'negro',1:'rojo',20:'negro',14:'rojo',31:'negro',9:'rojo',22:'rojo',18:'rojo',29:'negro',7:'rojo',28:'negro',12:'rojo',35:'negro',3:'rojo',26:'negro'};
 
 // VARIABLES INICIALIZADAS
@@ -141,19 +136,8 @@ function test_girar(){
 function animacionGiro(){
     limpiarCanvas();
     crearBordeNaranja();
-    
     //console.log(nuevoAngulo);
-
-    if ( nuevoAngulo == -1 ){
-        //console.log("if");
-        angulo = angulo - 0.01;
-        //angulo = angulo - 0.034;
-    }else{
-        //console.log("else");
-        angulo = angulo - nuevoAngulo;
-    }
-    
-
+    angulo = angulo - 0.01;
     girar();
     triangulo();
 }
@@ -261,25 +245,9 @@ function girar(){
             ultimoAlfaFinal0 = ((alfa*numeroCeldas)+angulo);
         }
 
-        /*
-        if( arrayNumero[numeroCeldas-1] == 0 && (-6.314 >= alfaAnterior && -6.314 <= ((alfa*numeroCeldas)+angulo)) ){
-            alert( "ha dado la vuelta" );
-            alfaAnterior = angulo;
-            alfaAnteriorLetras = angulo;
-        }
-        */
-
-        //alert("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
-        
-
-        //alert( alfaAnterior + " --- " + ((alfa*numeroCeldas)+angulo) );
-        //console.log("AlfaInicio: " + alfaAnterior + " ---- AlfaFinal: " + ((alfa*numeroCeldas)+angulo) );
 
         // Si hay un numero ganador lo buscara sino seguira girando
         if ( numeroGanador != -1 ){
-
-            //console.log("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
-
             // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba  (4.71 punto centrico de la circunferencia)
             if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+angulo)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+angulo))==true  || (-14.21 >= alfaAnterior && -14.21 <= ((alfa*numeroCeldas)+angulo)) ){                   
                 
@@ -288,9 +256,12 @@ function girar(){
 
                     // Parara la animacion de girar
                     clearInterval(id_accion); 
-            
+                    id_accion = -1;
+                    alfaAnterior = angulo;
+                    alfaAnteriorLetras = angulo;
+
                     //alert( ultimoAlfaInicial0 + " --- " + ultimoAlfaFinal0 );
-                    //setTimeout(inicio, 8000);
+                    setTimeout(inicio, 5000);
                 }
             }
         }
@@ -299,6 +270,88 @@ function girar(){
         alfaAnteriorLetras = (alfa*numeroCeldas)+angulo;
     }
 }
+
+function girar2(){
+    //console.log(numeroGanador);
+
+    var arrayNumero = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,32,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+    alfaAnterior = angulo;
+    alfaAnteriorLetras = angulo;
+
+    // for para dividir la circunferencia en 37 porciones
+    for( var numeroCeldas = 1; numeroCeldas <= 37; numeroCeldas++ ){
+        
+        // Creacion del arco de cada celda
+        lienzo.beginPath();
+        lienzo.arc(200, 250, radio, alfaAnterior, (alfa*numeroCeldas)+angulo );
+
+        // Eleccion del color
+        if ( numeroCeldas == 1){
+            lienzo.lineWidth = 80;
+            lienzo.strokeStyle = "green";
+        }
+        else if ( ((numeroCeldas % 2) == 0) == true ){
+            lienzo.lineWidth = 80;
+            lienzo.strokeStyle = "red";
+        }
+        else{
+            lienzo.lineWidth = 80;
+            lienzo.strokeStyle = "black";
+        }
+     
+        lienzo.stroke();
+
+        // Printar Numeros
+        // Se le suma la division para obtener la midad, asi al sumas se desplaza del inicio, quedandose en medio del borde
+        alfaAnteriorLetras = alfaAnteriorLetras + (alfa/2);
+        y = Math.sin(alfaAnteriorLetras)*radio;
+        x = Math.cos(alfaAnteriorLetras)*radio;
+
+        // Creacion del arco de cada celda
+        lienzo.beginPath();
+        // inicio y fin del arco donde se añadira el numero ( a xfinal se le suma la mitad de x, y a yfinal se le suma la mitad de y, asi obtendra como punto inicial el centro de la ruleta)
+        var xfinal = x+(200-5);
+        var yfinal = y+(250+5);
+
+        // Estilos
+        lienzo.fillStyle = 'white';
+        lienzo.font = '20pt';
+
+        // Se añade el numero que toca en esa posicion
+        lienzo.fillText( arrayNumero[numeroCeldas-1], xfinal , yfinal);
+        lienzo.stroke();
+
+        if( arrayNumero[numeroCeldas-1] == 0 ){
+            ultimoAlfaInicial0 = alfaAnterior;
+            ultimoAlfaFinal0 = ((alfa*numeroCeldas)+angulo);
+        }
+
+
+        // Si hay un numero ganador lo buscara sino seguira girando
+        if ( numeroGanador != -1 ){
+            // if para obtener los numeros que estan en el puntero y comparar si estan en el punto de arriba  (4.71 punto centrico de la circunferencia)
+            if( (4.71 >= alfaAnterior && 4.71 <= ((alfa*numeroCeldas)+angulo)) || (-1.57 >= alfaAnterior && -1.57 <= ((alfa*numeroCeldas)+angulo))==true  || (-14.21 >= alfaAnterior && -14.21 <= ((alfa*numeroCeldas)+angulo)) ){                   
+                
+                // si el numero ganador es el mismo que el que esta arriba del todo.. 
+                if ( (numeroGanador == arrayNumero[numeroCeldas-1]) == true ){
+
+                    // Parara la animacion de girar
+                    clearInterval(id_accion); 
+                    id_accion = -1;
+                    alfaAnterior = angulo;
+                    alfaAnteriorLetras = angulo;
+
+                    //alert( ultimoAlfaInicial0 + " --- " + ultimoAlfaFinal0 );
+                    setTimeout(inicio, 5000);
+                }
+            }
+        }
+        
+        alfaAnterior = (alfa*numeroCeldas)+angulo;
+        alfaAnteriorLetras = (alfa*numeroCeldas)+angulo;
+    }
+}
+
 
 
 function limpiarCanvas(){
@@ -311,8 +364,9 @@ function limpiarCanvas(){
 // =================================================    TIEMPO  ===============================================
 //var segundos = 60;
 
-
 function inicio() {
+    alfaAnterior = angulo;
+
     nuevoAngulo = -1;
     numeroGanador = -1;
 
@@ -321,8 +375,13 @@ function inicio() {
     $('#labelTiempo').text("0"+minutos+":"+segundos);
 
     //clearInterval(id_test_tirar);
-    control = setInterval(cronometro,1000);
-    id_accion = setInterval(animacionGiro, 10);
+    if( control == -1 ){
+        control = setInterval(cronometro,1000);
+    }
+    if( id_accion == -1 ){
+        id_accion = setInterval(animacionGiro, 10);
+    }
+    
 }
 
 function cronometro () { 
@@ -333,6 +392,7 @@ function cronometro () {
     if (segundos == 0) {
         //segundos = 60;
         clearInterval(control);
+        control = -1;
         $('#labelTiempo').text("00:00");
         girarRuleta(); 
     }
@@ -363,7 +423,7 @@ function girarRuleta () {
 
                 localStorage.setItem('numeroGanador', numeroGanador);
  
-                nuevoAngulo = 0.034;
+                //nuevoAngulo = 0.034;
 
                 // Funcion que se encarga de repartir las ganancias
                 $.ajax({
@@ -450,3 +510,19 @@ function printarResultadoRuleta(beta, numeroGanador){
     }
 }
 */
+
+
+
+ /*
+        if( arrayNumero[numeroCeldas-1] == 0 && (-6.314 >= alfaAnterior && -6.314 <= ((alfa*numeroCeldas)+angulo)) ){
+            alert( "ha dado la vuelta" );
+            alfaAnterior = angulo;
+            alfaAnteriorLetras = angulo;
+        }
+        */
+
+        //alert("AlfaAnterior: " + alfaAnterior + " --- AlfaFinal: " +  ((alfa*numeroCeldas)+angulo) );
+        
+
+        //alert( alfaAnterior + " --- " + ((alfa*numeroCeldas)+angulo) );
+        //console.log("AlfaInicio: " + alfaAnterior + " ---- AlfaFinal: " + ((alfa*numeroCeldas)+angulo) );

@@ -146,6 +146,7 @@
 
 
         <script>
+            var interval = -1;
             printarCreditos();
             printarNumeros();
             printarApuestas();
@@ -278,14 +279,14 @@
             }
 
 
-            setInterval(function(){
-                printarCreditos();
-                printarNumeros();
-                printarApuestas();
-            }, 1000);
-
-
+            if ( interval == -1 ){
+                interval = setInterval(function(){
+                    printarCreditos();
+                    printarNumeros();
+                    printarApuestas();
+                }, 1000);
+            }
+            
         </script>
-
     </body>
 </html>

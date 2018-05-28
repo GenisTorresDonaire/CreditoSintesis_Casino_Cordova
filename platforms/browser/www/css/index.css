@@ -148,19 +148,6 @@ h1 {
     background-color: #006bb3;
 }
 
-
-.rombo {
-    width: 30px; 
-    height: 30px; 
-    border: 3px solid black; 
-    background: #EC5463;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
-
 .ficha{
     height: 35px; 
     width: 35px;
@@ -168,10 +155,10 @@ h1 {
 
 .reloj{
     text-align: center; 
-    font-size: 40px; 
+    font-size: 25px; 
     font-family: Courier,sans-serif;
     color: #363431;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 
@@ -183,7 +170,7 @@ h1 {
     border-radius: 10px;
     -moz-appearance:textfield;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .numerosAnteriores{
