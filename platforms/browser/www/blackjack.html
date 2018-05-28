@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-eval' 'unsafe-inline';"">
+        
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/style_login.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <script type="text/javascript" src="js/bootstrap.min.js"></script> 
+        
+        <title>Casino World</title>
+    </head>
+    <body>
+
+        <div class="app" style="visibility: hidden;">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+        </div>
+
+
+        <div class="container" style="height: 100%; width: 100%;">
+            <!--    CREDITOS    -->
+            <div id="ir_ajustes" style="border-radius: 10px; background: rgba(255,255,255,0.5); float: left; margin-top: 30px; min-width: 150px; text-align: center;">
+                <span style="font-size: 40px; padding-right: 10px; padding-left: 10px;"><label id="creditosUsuario">0</label><label>$</label></span>
+            </div>
+            <!--    AJUSTES    -->
+            <div id="ir_ajustes" style="border-radius: 10px; background: rgba(0,0,255,0.5); float: right; margin-top: 30px; padding: 5px 5px 5px 5px;">
+                <img src="img/ajustes.png" style="width: 50px; height: 50px;">
+            </div>
+
+            <!--    CABECERA TITULO    -->
+            <div class="row" style="padding-top: 50px; padding-bottom: 50px;">
+                <div class="col-md-12" style="text-align: center;"><h1>Casino World</h1></div>
+            </div>
+
+            <!--    MESA DE JUEGO      -->
+            <div class="row" style="height:500px; width: 1131px;background-color: green; border-radius: 30px;">
+                <div  style="height:100px; width: 370px; ">         </div>
+                <div id='crupier' style="height:100px; width: 370px; display: inline-block; ;">
+                    <div id='carta1C' class ="carta" style="height:100px; width: 60px; float: right; ">   </div>
+                    <div id='carta2C' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta3C' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta4C' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta5C' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta6C' class ="carta" style="height:100px; width: 60px; float: right;"">   </div>
+                </div>
+                <div  style="height:100px; width: 370px; ">
+                    <h5 style="text-align: center;"> Puntos del crupier :</h5>
+                    <h4 id="puntosIA" style="text-align: center;"></h4>
+                </div>
+                <div  style="height:100px; width: 370px; "></div>
+
+                <div id='creditos' style="height:100px; width: 370px;  ">
+                    <div id='creditos1' style="height:100px; width: 120px; float: right; ">   </div>
+                    <div id='creditos2' style="height:100px; width: 120px; float: right;">   </div>
+                    <div id='creditos3' style="height:100px; width: 120px; float: right;">   </div>
+                </div>
+                <div  style="height:100px; width: 370px; "></div>
+                <div id='jug1' style="height:100px; width: 370px; float: right; ">
+                    <div id='carta1J1' class ="carta" style="height:100px; width: 60px; float: right; ">   </div>
+                    <div id='carta2J1' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta3J1' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta4J1' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta5J1' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta6J1' class ="carta" style="height:100px; width: 60px; float: right;"">   </div>
+                </div>
+                <div id='jug2' style="height:100px; width: 370px;  ">
+                    <div id='carta1J2' class ="carta" style="height:100px; width: 60px; float: right; ">   </div>
+                    <div id='carta2J2' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta3J2' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta4J2' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta5J2' class ="carta"  style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta6J2' class ="carta" style="height:100px; width: 60px; float: right;"">   </div>
+                </div>
+                <div id='jug3' style="height:100px; width: 370px; float: left; ">
+                    <div id='carta1J3' class ="carta" style="height:100px; width: 60px; float: right; ">   </div>
+                    <div id='carta2J3' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta3J3' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta4J3' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta5J3' class ="carta" style="height:100px; width: 60px; float: right;">   </div>
+                    <div id='carta6J3' class ="carta" style="height:100px; width: 60px; float: right;"">   </div>
+                </div>
+
+                <div style="text-align: center;">
+                        <input id="apuesta" type="number" class="apuesta" value="100" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+                </div>
+
+                <div style="height:100px; width: 600px;"">
+
+                    <button id="apostar" style="height:100px; width: 150px; float: right; "> Apostar</button> 
+
+                    <button id="pide" style="height:100px; width: 150px; float: right; "> Pide</button>  
+                
+                    <button id="pasa" style="height:100px; width: 150px; float: right;"> Pasa</button>   
+                
+                    <button id="dobla" style="height:100px; width: 150px; float: right;"> Dobla</button>   
+                </div>
+
+                <div style="height:100px; width: 200px;">
+                    
+                    <h5 style="text-align: center;"> Tus puntos :</h5>
+                    <h4 id="puntos" style="text-align: center;"></h4>
+
+                </div>
+
+
+                    
+
+
+     <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/blackJack.js"></script>  
+        <script type="text/javascript" src="js/ruleta.js"></script>      
+    </body>
+</html>

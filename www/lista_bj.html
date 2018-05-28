@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+      
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-eval' 'unsafe-inline';"">
+        
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/style_login.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        
+        <title>Casino World</title>
+    </head>
+    <body> 
+        <div class="app" style="visibility: hidden;">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+        </div>
+
+        <div class="container" style="height: 100%; width: 100%;">
+            <!--    AJUSTES    -->
+            <div id="ir_ajustes" style="border-radius: 10px; background: rgba(0,0,255,0.5); float: right; margin-top: 30px; padding: 5px 5px 5px 5px;">
+                <img src="img/ajustes.png" style="width: 50px; height: 50px;">
+            </div>
+
+            <!--    CABECERA TITULO    -->
+            <div class="row" style="padding-top: 50px; padding-bottom: 50px;">
+                <div class="col-md-12" style="text-align: center;"><h1>Casino World</h1></div>
+            </div>
+
+            <!--    MENU    -->
+            <div class="row" style="background-color: white; border-radius: 5px; background: rgba(255,255,255,0.5); padding: 10px 10px 10px 10px;">
+                <div id='divSalas' style="height:450px; width: 730px; display: inline-block;"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+
+        <script>
+
+            $.ajax({
+                type : "GET",
+                url : "http://appcasino.herokuapp.com/api/salas_bj",     
+
+                success: function(respuesta){
+                    respuesta = JSON.parse(respuesta);
+
+                    if( respuesta[0].status == 'ok' ){
+                        
+                        // for para obtener todas las salas con sus datos respectivos
+                        for(var numSalas = 0; numSalas < respuesta[0].mensaje.length; numSalas++){
+                            
+                            // Creacion del div con los datos de cada sala
+                            var div = $('<div id="'+respuesta[0].mensaje[numSalas].sala+'" style="height: 200px; width: 200px; border: 2px solid black; float: left; text-align: center; margin-left: 10px; background: rgba(255,0,0,0.4); border-radius: 5px; padding: 10px 10px 10px 10px;"></div>').click( function(e){ entrarSala(this.id); });
+                            
+                            // Creacion de la imagen de sala
+                            var img = $('<img style="height: 120px; width: 120px; margin-bottom: 5px;" src="img/poker.png"></img>');
+
+                            // Creacion de la etiqueta sala con la id
+                            var sala = $('<h3>Sala: '+respuesta[0].mensaje[numSalas].sala+'</h3>');
+                            
+                            // jugadores en la sala
+                            var jugadores = $('<h3><b>'+respuesta[0].mensaje[numSalas].jugadores+'/3</b></h3>');
+
+                            div.append(img);
+                            div.append(sala);
+                            div.append(jugadores);
+                            $('#divSalas').append(div);
+                        }
+                    }    
+                },
+                error: function(respuesta){
+
+                    alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                } 
+            }); 
+            
+
+            // funcion que se encarga de entrar a una room
+            function entrarSala(e){
+                alert(e);
+                $.ajax({
+                    type : "GET",
+                    url : "http://appcasino.herokuapp.com/api/entrar_room_bj/"+e+"/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+
+                        if( respuesta.status == 'ok' ){
+                            localStorage.setItem('id_partida', respuesta.id_partida );
+                            window.location.replace("blackjack.html");
+                        }else{
+                            alert("erroor: " + JSON.stringify(respuesta));
+                        }
+                    },
+                    error: function(respuesta){
+                        alert("http://appcasino.herokuapp.com/api/entrar_room_bj/"+e+"/"+localStorage.getItem('token'));
+                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    } 
+                }); 
+            }
+        </script>   
+    </body>
+</html>
