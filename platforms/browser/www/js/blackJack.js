@@ -101,14 +101,8 @@ function rondaJugador(){
            
             },
             error: function (request, status, error) {
-<<<<<<< HEAD
-                alert("ni");
-                alert(JSON.stringify(request));
-=======
                //alert("ni");
-                //alert(JSON.stringify(request));
->>>>>>> b93af13185516d213eb444a566fdd73148685a76
-                
+                alert(JSON.stringify(request)); 
             }
         });
 }
