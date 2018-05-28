@@ -43,6 +43,23 @@
         <title>Casino World</title>
     </head>
     <body>
+        <div id="menuAjustes" style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding: 10px 10px;">
+            <div style="background-color: white; position: absolute; top: 50%; left: 50%; margin: 0; transform: translate(-50%,-50%); height: 200px; width: 300px; text-align: center; border-radius: 10px;">
+                <button id="salirSala" style="border-radius: 8px; padding: 14px 40px; font-size: 16px; margin-top: 50px;">Salir de la room</button>     
+            </div>  
+        </div>
+
+        <div id="menuPerdido" style=" position: absolute;width: 25%; height: 25%; background-color: rgba(0,0,0,0.0); ">
+            <div style=" position: absolute; top: 190%; left: 190%; margin: 0; transform: translate(-50%,-50%); height: 200px; width: 300px; text-align: center; border-radius: 10px;">
+                <button id="perdido" style="border-radius: 8px; padding: 14px 40px; font-size: 16px; margin-top: 50px;">Has perdido!</button>     
+            </div>  
+        </div>
+
+        <div id="menuGanado" style=" position: absolute;width: 25%; height: 25%; background-color: rgba(0,0,0,0.0); ">
+            <div style="position: absolute; top: 190%; left: 190%; margin: 0; transform: translate(-50%,-50%); height: 200px; width: 300px; text-align: center; border-radius: 10px;">
+                <button id="ganado" style="border-radius: 8px; padding: 14px 40px; font-size: 16px; margin-top: 50px;">Has ganado!</button>     
+            </div>  
+        </div>
 
         <div class="app" style="visibility: hidden;">
             <h1>Apache Cordova</h1>
@@ -55,7 +72,7 @@
 
         <div class="container" style="height: 100%; width: 100%;">
             <!--    CREDITOS    -->
-            <div id="ir_ajustes" style="border-radius: 10px; background: rgba(255,255,255,0.5); float: left; margin-top: 30px; min-width: 150px; text-align: center;">
+            <div id="creditos" style="border-radius: 10px; background: rgba(255,255,255,0.5); float: left; margin-top: 30px; min-width: 150px; text-align: center;">
                 <span style="font-size: 40px; padding-right: 10px; padding-left: 10px;"><label id="creditosUsuario">0</label><label>$</label></span>
             </div>
             <!--    AJUSTES    -->
@@ -86,9 +103,10 @@
                 <div  style="height:100px; width: 370px; "></div>
 
                 <div id='creditos' style="height:100px; width: 370px;  ">
-                    <div id='creditos1' style="height:100px; width: 120px; float: right; ">   </div>
-                    <div id='creditos2' style="height:100px; width: 120px; float: right;">   </div>
-                    <div id='creditos3' style="height:100px; width: 120px; float: right;">   </div>
+                    <div id='creditos1' style="height:300px; width: 360px; float: right; text-align: center;">   
+                        <h3 id="apuestaCreditos" style="text-align: center;"></h3>
+                    </div>
+        
                 </div>
                 <div  style="height:100px; width: 370px; "></div>
                 <div id='jug1' style="height:100px; width: 370px; float: right; ">

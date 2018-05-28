@@ -44,6 +44,46 @@
 
 //function
 
+$("#menuAjustes").hide();
+$('#ir_ajustes').click(function(e) { 
+    $("#menuAjustes").show();
+});
+
+$("#menuPerdido").hide();
+$("#menuGanado").hide();
+
+$("#perdido").click(function(e){
+    $("#menuPerdido").hide();
+});
+
+$("#ganado").click(function(e){
+    $("#menuGanado").hide();
+});
+
+
+
+// Ajax para salir de la room
+$('#salirSala').click(function(e) { 
+    quitarCartas();
+    $.ajax({
+        type : "GET",
+        url : "https://appcasino.herokuapp.com/api/salirRoomBj/"+localStorage.getItem('token'),     
+
+        success: function(respuesta){
+            respuesta = JSON.parse(respuesta);
+
+            
+            
+            setTimeout(function() {window.location.replace("lista_bj.html")} , 1000);
+        },
+        error: function(respuesta){
+            alert("https://appcasino.herokuapp.com/api/salirRoomBj"+localStorage.getItem('token'),);
+            console.log( "erroor ----> " + JSON.stringify(respuesta) );
+        } 
+    }); 
+});
+
+
 function rondaJugador(){
     $.ajax({
             type: 'GET',
@@ -61,8 +101,8 @@ function rondaJugador(){
            
             },
             error: function (request, status, error) {
-               alert("ni");
-                alert(JSON.stringify(request));
+               //alert("ni");
+                //alert(JSON.stringify(request));
                 
             }
         });
@@ -226,6 +266,12 @@ function repartir(){
     
     if (localStorage.getItem('estadoPartida') == 0) {
         //alert("Se puede repaartir");
+
+        $("#apostar").hide();
+        $("#pide").show();
+        $("#dobla").show();
+        $("#pasa").show();
+
         
         var cartasC;
         var cartasCC;
@@ -351,6 +397,7 @@ function quitarCartas(){
 
                     success: function (msg) { 
 
+
                         for (var i = 1 ; i <= 6; i++) {
                             $('#carta'+ i + 'C').empty();
                             $('#carta'+ i + 'C').css("background-color" ,"green");
@@ -418,7 +465,7 @@ function IA(){
                     $('#carta1C').css("background-color" ,"white");
                     $('#carta1C').append('<img style="height:95px; width: 55px;" src="img/Cartas/'+localStorage.getItem("cartaFiguraCrupier")+'/'+localStorage.getItem("cartaNumeroCrupier")+'.png"></img>');
                     
-
+                    puntosIA();
 
                      $.ajax({
                         type: 'GET',
@@ -436,13 +483,22 @@ function IA(){
 
                                 setTimeout(puntosIA, 500);
 
-                                                   
+                                setTimeout(function(){$("#puntos").text("0"); } , 2500);                                 
+                                setTimeout(function(){$("#puntosIA").text("0"); } , 2500);                                                    
 
-                                setTimeout(function() {alert("Has perdido") }, 2000);
+                                setTimeout(function() {$("#menuPerdido").show(); }, 2000);
+                                setTimeout(function() {$("#apostar").show();} , 1300);
+                                setTimeout(function() {$("#dobla").hide();} , 1300);
+                                setTimeout(function() {$("#pide").hide();} , 1300);
+                                setTimeout(function() {$("#pasa").hide();} , 1300);
+                                setTimeout(function() {$("#apuestaCreditos").text(""); } , 2500);       
 
-                                setTimeout(quitarCartas, 2500);                                   
 
-                                setTimeout(repartir , 3000);
+                                setTimeout(quitarCartas, 2500); 
+
+                                                         
+
+                                //setTimeout(repartir , 3000);
                             }else if (msg1.estado == "pide"){
                                 //alert("PIDE");
                                  $.ajax({
@@ -460,7 +516,7 @@ function IA(){
                                                 } , 1000);
 
                                             setTimeout(
-                                                puntosIA , 500
+                                                puntosIA , 1500
                                             );
                                         },
                                         error: function (request, status, error) {
@@ -483,17 +539,35 @@ function IA(){
                                             setTimeout(function() {
                                                 $('#carta'+(msg.numCartas)+'C') .css("background-color" ,"white");
                                                 $('#carta'+(msg.numCartas)+'C').append('<img style="height:95px; width: 55px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
-                                                } , 1000);
+                                                } , 500);
 
                                             setTimeout(
-                                                puntosIA , 500
-                                            );                 
+                                                puntosIA , 1000
+                                            ); 
                                             
-                                            setTimeout(function() { alert("Has ganado") }, 2000); 
 
-                                            setTimeout(quitarCartas, 2500);                                   
+                                            setTimeout(function(){$("#puntos").text("0"); } , 2000);                                 
+                                            setTimeout(function(){$("#puntosIA").text("0"); } , 2000);  
+                                            setTimeout(function() {$("#apostar").show();} , 1300);              
 
-                                            setTimeout(repartir, 3000);
+                                            setTimeout(listaG,1500);
+                                            setTimeout(function() {$("#apuestaCreditos").text(""); } , 2500);
+                                            setTimeout(function() {$("#dobla").hide();} , 1300);
+                                            setTimeout(function() {$("#pide").hide();} , 1300);
+                                            setTimeout(function() {$("#pasa").hide();} , 1300);
+
+                                            setTimeout(function() {$("#menuGanado").show(); }, 2000);
+                                            
+                                            
+                                            setTimeout(function(){$("#puntos").text("0"); } , 2500);                                 
+                                            setTimeout(function(){$("#puntosIA").text("0"); } , 2500);
+
+                                            setTimeout(creditos , 2750);                                         
+                                            
+
+                                            setTimeout(quitarCartas, 2500);  
+
+                                            //setTimeout(repartir, 3000);
 
                                         },
                                         error: function (request, status, error) {
@@ -507,8 +581,7 @@ function IA(){
                              }
 },
                         error: function (request, status, error) {
-                            alert('https://appcasino.herokuapp.com/api/ia/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("rondaActual"));
-                            alert(JSON.stringify(request));                    
+                   
                         }
                     });     
 
@@ -518,12 +591,36 @@ function IA(){
                 
             },
             error: function (request, status, error) {
-               alert('https://appcasino.herokuapp.com/api/turnos/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("listaJugadoresLength")+'/'+localStorage.getItem("rondaActual"));
-                alert(JSON.stringify(request));
+
                 
             }
         }); 
 }
+
+
+
+function listaG(){
+    $.ajax({
+            type: 'GET',
+            url: 'https://appcasino.herokuapp.com/api/listaG/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("rondaActual"), 
+
+
+            success: function (msg) { 
+                 msg = JSON.parse(msg);
+                 //alert(msg.estado);
+
+                     
+           
+            },
+            error: function (request, status, error) {
+                //alert('https://appcasino.herokuapp.com/api/listaG/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("rondaActual"));
+                
+            }
+        });
+}
+
+
+
 
 
 
@@ -565,22 +662,27 @@ $.ajax({
 rondaJugador();
 listaJugadores();
 
-setTimeout(repartir , 950);
+//setTimeout(repartir , 950);
 
 /*
 
 --------------------------------------------
 
 */
+$("#pasa").hide();
+$("#pide").hide();
+$("#dobla").hide();
 
 
 $('#apostar').click(function(){
     var apuesta;
     apuesta = $("#apuesta").val();
 
-    localStorage.getItem("apuesta" , apuesta);
+    localStorage.setItem("apuesta" , apuesta);
 
-    alert(apuesta);
+    $("#apuestaCreditos").text(localStorage.getItem("apuesta"));
+
+    //alert(apuesta);
 
     $.ajax({
         type: 'GET',
@@ -588,12 +690,13 @@ $('#apostar').click(function(){
 
 
         success: function (msg) { 
-            alert("SIUU");
+            //alert("SIUU");
+            repartir();
             creditos();               
         },
         error: function (request, status, error) {
-            alert('https://appcasino.herokuapp.com/api/apostarBJ/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual")+'/'+apuesta);
-            alert("NOOO");
+            //alert('https://appcasino.herokuapp.com/api/apostarBJ/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual")+'/'+apuesta);
+            //alert("NOOO");
             
             
         }
@@ -753,26 +856,138 @@ $('#pasa').click(function(){
 
 
 
-$('dobla').click(function(){
+$('#dobla').click(function(){
 
-	$.ajax({
-                 	type: 'GET',
-                    url: 'https://appcasino.herokuapp.com/api/dobla/', 
+
+     	$.ajax({
+        type: 'GET',
+        url: 'https://appcasino.herokuapp.com/api/dobla/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"), 
+
+
+        success: function (msg) { 
+            msg1 = JSON.parse(msg);
+            var apuesta;
+            apuesta = localStorage.getItem("apuesta");
+
+            apuesta = apuesta *2 ;
+
+            $("#apuestaCreditos").text(apuesta);
+
+
+            //alert("ESTADO PIDE "+ msg1.estado);
+
+            if (msg1.estado == 'pide') {
+                //alert("PIDE");
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token"), 
 
 
                     success: function (msg) { 
-
-   
+                        //alert("TODO BIEN X2");
                         msg = JSON.parse(msg);
+                       // alert(msg1.figura);
+
+                        for (var i = 0; i < localStorage.getItem("listaJugadores").length ; i++) {
+                           
+                            if (msg.idJugador == localStorage.getItem("listaJugadores")[i]) {
+                                if ( i == 0){
+
+                                    //alert("OJOOOOO1");
+                                   $('#carta'+(msg.numCartas)+div1) .css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div1).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+                                }else if ( i == 1 ){
+                                   // alert("OJOOOOO2");
+                                    $('#carta'+(msg.numCartas)+div2).css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div2).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+
+                                }else if ( i == 2){
+                                   // alert("OJOOOOO3");
+                                    $('#carta'+(msg.numCartas)+div3).css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div3).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+                                } 
+                                
+                            } 
+
+                        }
+
+                       setTimeout(puntos , 500);
+                        setTimeout(creditos , 1000);            
+                        
                    
                     },
-                    error: function (request, status, error) {
+                    error: function (request, status, error) { 
+                        alert('https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("idPartida")+'/'+localStorage.getItem("token"));
                         
                         
                     }
                 });
+
+            }else if (msg1.estado == 'pasa'){
+                //alert(JSON.stringify(msg1));
+                //alert(msg1.figura);
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token"), 
+
+
+                    success: function (msg) { 
+                        
+                        msg = JSON.parse(msg);
+
+                       // alert(msg1.figura);
+                        
+
+                        for (var i = 0; i < localStorage.getItem("listaJugadores").length ; i++) {
+                           
+                            if (msg.idJugador == localStorage.getItem("listaJugadores")[i]) {
+                                if ( i == 0){
+
+                                    //alert("OJOOOOO1");
+                                   $('#carta'+(msg.numCartas)+div1) .css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div1).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+                                }else if ( i == 1 ){
+                                    //alert("OJOOOOO2");
+                                    $('#carta'+(msg.numCartas)+div2).css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div2).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+
+                                }else if ( i == 2){
+                                    //alert("OJOOOOO3");
+                                    $('#carta'+(msg.numCartas)+div3).css("background-color" ,"white");
+                                    $('#carta'+(msg.numCartas)+div3).append('<img style="height:95px; width: 50px;" src="img/Cartas/'+msg1.figura+'/'+msg1.numero+'.png"></img>');
+                                } 
+                                
+                            } 
+
+                        }
+                        setTimeout(puntos , 500);
+
+                        setTimeout(creditos , 1000);                              
+                        
+                   
+                    },
+                    error: function (request, status, error) { 
+                        //alert('https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("idPartida")+'/'+localStorage.getItem("token"));
+                        //alert("subsuelo11111");
+                        
+                    }
+                });
+                
+            }else if (msg1.estado == 'pasa1'){
+                //alert("pasa si o si ");
+            }             
+       
+        },
+        error: function (request, status, error) { 
+            //alert('https://appcasino.herokuapp.com/api/pide/'+localStorage.getItem("idPartida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"));
+            //alert("subsuelo");
+            alert('https://appcasino.herokuapp.com/api/dobla/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"));
+        }
+    });
+
 });
 
+// Evento para abrir el menu de salir de la room
 
 setInterval(turnos, 4000); //300000 MS == 5 minutes
 

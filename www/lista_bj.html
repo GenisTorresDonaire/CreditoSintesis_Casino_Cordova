@@ -89,7 +89,7 @@
 
             // funcion que se encarga de entrar a una room
             function entrarSala(e){
-                alert(e);
+                //alert(e);
                 $.ajax({
                     type : "GET",
                     url : "http://appcasino.herokuapp.com/api/entrar_room_bj/"+e+"/"+localStorage.getItem('token'),     
