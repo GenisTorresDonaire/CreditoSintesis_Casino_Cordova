@@ -85,7 +85,7 @@
                     }    
                 },
                 error: function(respuesta){
-                    alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                 } 
             }); 
             
@@ -104,11 +104,11 @@
                             localStorage.setItem('id_partida', respuesta.id_partida );
                             window.location.replace("ruleta.html");
                         }else{
-                            alert("erroor: " + JSON.stringify(respuesta));
+                            console.log("erroor: " + JSON.stringify(respuesta));
                         }
                     },
                     error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                        console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                     } 
                 }); 
             }

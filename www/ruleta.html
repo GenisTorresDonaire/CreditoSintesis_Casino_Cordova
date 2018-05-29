@@ -146,11 +146,15 @@
 
 
         <script>
+
+            // Variables
             var interval = -1;
             printarCreditos();
             printarNumeros();
             printarApuestas();
 
+
+            // Funcion que se encarga de printar los codigos
             function printarCreditos(){
                 $.ajax({
                     type : "GET",
@@ -160,6 +164,7 @@
                         respuesta = JSON.parse(respuesta);
 
                         if( respuesta[0].status == 'ok' ){
+                            // Almacenamiento de los creditos, y actualizacion de los creditos
                             localStorage.setItem('creditos', respuesta[0].creditos);
                             $('#creditosUsuario').text(localStorage.getItem('creditos'));
                         }
@@ -170,6 +175,8 @@
                 });
             }
 
+
+            // Funcion para printar los numeros
             function printarNumeros(){
                 //Funcion para printar los ultimos 10 numeros
                 $.ajax({
@@ -227,6 +234,8 @@
                 }); 
             }
 
+
+            // Printar todas las apuestas de esa partida
             function printarApuestas(){
                 // Llamada para obtener todas las apuestas que se van haciendo
                 $.ajax({
@@ -237,7 +246,6 @@
                         respuesta = JSON.parse(respuesta);
                         
                         if( respuesta[0].status == "ok" ){
-
                             // for para manipular las apuestas por separado
                             for ( var num_apuestas = 0; num_apuestas < respuesta[0].mensaje.length; num_apuestas++ ){
                                 var id_jugador = respuesta[0].mensaje[num_apuestas].id_usuario;
@@ -263,7 +271,6 @@
                                                 }
                                             }
                                         }
-                                        //alert( JSON.stringify(respuesta_colores) );   
                                     },
                                     error: function(respuesta_color){
                                         console.log( "erroor color_usuario ----> " + JSON.stringify(respuesta_color) );
@@ -278,7 +285,7 @@
                 }); 
             }
 
-
+            // Si no se ha creado el setInterval correcto, se creara
             if ( interval == -1 ){
                 interval = setInterval(function(){
                     printarCreditos();
@@ -286,7 +293,6 @@
                     printarApuestas();
                 }, 1000);
             }
-            
         </script>
     </body>
 </html>

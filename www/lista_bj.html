@@ -82,7 +82,7 @@
                 },
                 error: function(respuesta){
 
-                    alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                 } 
             }); 
             
@@ -101,12 +101,12 @@
                             localStorage.setItem('id_partida', respuesta.id_partida );
                             window.location.replace("blackjack.html");
                         }else{
-                            alert("erroor: " + JSON.stringify(respuesta));
+                            console.log("erroor: " + JSON.stringify(respuesta));
                         }
                     },
                     error: function(respuesta){
-                        alert("http://appcasino.herokuapp.com/api/entrar_room_bj/"+e+"/"+localStorage.getItem('token'));
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                        console.log("http://appcasino.herokuapp.com/api/entrar_room_bj/"+e+"/"+localStorage.getItem('token'));
+                        console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                     } 
                 }); 
             }
