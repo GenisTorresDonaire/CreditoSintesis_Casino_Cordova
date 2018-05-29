@@ -48,7 +48,7 @@ $( "#ir_ruleta" ).click(function() {
 });
 
 $( "#ir_tienda" ).click(function() { 
-  alert("tienda");
+  console.log("tienda");
 });
 
 $( "#ir_ajustes" ).click(function() { 

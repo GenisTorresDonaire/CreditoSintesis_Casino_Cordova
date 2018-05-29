@@ -67,7 +67,7 @@ function rondaJugador(){
             },
             error: function (request, status, error) {
                //alert("ni");
-                //alert(JSON.stringify(request)); 
+                alert(JSON.stringify(request)); 
             }
         });
 }

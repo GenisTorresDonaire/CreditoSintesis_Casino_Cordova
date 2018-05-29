@@ -50,15 +50,17 @@
         <script>
             $("#ir_ajustes").click(function() {
                 window.location.replace("inicio.html");
-
             });
+            
             $.ajax({
                 type : "GET",
                 url : "http://appcasino.herokuapp.com/api/salas_ruleta",     
 
+                // Si la llamada es succes
                 success: function(respuesta){
                     respuesta = JSON.parse(respuesta);
 
+                    // Si el status esta ok
                     if( respuesta[0].status == 'ok' ){
                         
                         // for para obtener todas las salas con sus datos respectivos
@@ -76,6 +78,7 @@
                             // jugadores en la sala
                             var jugadores = $('<h3><b>'+respuesta[0].mensaje[numSalas].jugadores+'/3</b></h3>');
 
+                            // insercion en el div
                             div.append(img);
                             div.append(sala);
                             div.append(jugadores);
@@ -84,12 +87,12 @@
                     }    
                 },
                 error: function(respuesta){
-                    alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                    console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                 } 
             }); 
             
 
-            // funcion que se encarga de entrar a una room
+            // Funcion que se encarga de entrar a una room
             function entrarSala(e){
                 $.ajax({
                     type : "GET",
@@ -99,14 +102,15 @@
                         respuesta = JSON.parse(respuesta);
 
                         if( respuesta.status == 'ok' ){
+                            // Almacenamiento del id, y redireccion a ruleta.html
                             localStorage.setItem('id_partida', respuesta.id_partida );
                             window.location.replace("ruleta.html");
                         }else{
-                            alert("erroor: " + JSON.stringify(respuesta));
+                            console.log("erroor: " + JSON.stringify(respuesta));
                         }
                     },
                     error: function(respuesta){
-                        alert( "erroor login ----> " + JSON.stringify(respuesta) );
+                        console.log( "erroor login ----> " + JSON.stringify(respuesta) );
                     } 
                 }); 
             }
