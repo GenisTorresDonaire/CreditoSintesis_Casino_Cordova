@@ -76,7 +76,7 @@ $( "td" ).click(function(e) {
             valor = this.id;
         }
 
-        alert("https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val());
+       
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
         */
@@ -87,7 +87,7 @@ $( "td" ).click(function(e) {
             success: function(respuesta){
                 respuesta = JSON.parse(respuesta);
                 
-                alert(JSON.stringify(respuesta));
+                //alert(JSON.stringify(respuesta));
             },
             error: function(respuesta){
                 console.log( "erroor ----> " + JSON.stringify(respuesta) );
@@ -407,7 +407,7 @@ function cronometro () {
 
 
 // Una vez acabado el tiempo, se solicitara
-function girarRuleta () { 
+function girarRuleta() { 
     // LLamar a la funcion que generara el numero random
     $.ajax({
         type : "GET",
@@ -433,6 +433,8 @@ function girarRuleta () {
 
                     success: function(respuesta){
                         respuesta = JSON.parse(respuesta);
+
+                        alert(JSON.stringify(respuesta));
                     },
                     error: function(respuesta){
                         console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
