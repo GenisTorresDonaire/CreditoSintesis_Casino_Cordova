@@ -67,7 +67,7 @@ $( "td" ).click(function(e) {
         }
         // PAR/IMPAR
         else if( this.id == "par" || this.id == "impar" ){
-            tipo = "par/impar";
+            tipo = "par-impar";
             valor = this.id;
         }
         // NUMERO
@@ -76,7 +76,7 @@ $( "td" ).click(function(e) {
             valor = this.id;
         }
 
-        alert("https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val());
+        //alert("https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val());
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
         */
@@ -87,7 +87,7 @@ $( "td" ).click(function(e) {
             success: function(respuesta){
                 respuesta = JSON.parse(respuesta);
                 
-                alert(JSON.stringify(respuesta));
+                //alert(JSON.stringify(respuesta));
             },
             error: function(respuesta){
                 console.log( "erroor ----> " + JSON.stringify(respuesta) );
@@ -429,13 +429,15 @@ function girarRuleta () {
                 // Funcion que se encarga de repartir las ganancias
                 $.ajax({
                     type : "GET",
-                    url : "https://appcasino.herokuapp.com/api/ganancias/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador'),     
+                    url : "https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),     
 
                     success: function(respuesta){
                         respuesta = JSON.parse(respuesta);
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
                     },
                     error: function(respuesta){
                         console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
                     } 
                 });  
 

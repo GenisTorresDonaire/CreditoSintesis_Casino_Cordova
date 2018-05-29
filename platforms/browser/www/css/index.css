@@ -201,12 +201,8 @@ h1 {
 
 .carta {
     border-color: black;
-<<<<<<< HEAD
     border-style: solid;
 }
-=======
-    border-style: solid;}
->>>>>>> b93af13185516d213eb444a566fdd73148685a76
 
 #salirSala {
   display: inline-block;
@@ -229,8 +225,4 @@ h1 {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
-<<<<<<< HEAD
-=======
-
->>>>>>> b93af13185516d213eb444a566fdd73148685a76
 }
