@@ -67,7 +67,7 @@ $( "td" ).click(function(e) {
         }
         // PAR/IMPAR
         else if( this.id == "par" || this.id == "impar" ){
-            tipo = "par/impar";
+            tipo = "par-impar";
             valor = this.id;
         }
         // NUMERO
@@ -76,7 +76,6 @@ $( "td" ).click(function(e) {
             valor = this.id;
         }
 
-       
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
         */
@@ -86,7 +85,6 @@ $( "td" ).click(function(e) {
 
             success: function(respuesta){
                 respuesta = JSON.parse(respuesta);
-                
             },
             error: function(respuesta){
                 console.log( "erroor ----> " + JSON.stringify(respuesta) );
@@ -313,6 +311,23 @@ function numeroRandom(){
 
                 localStorage.setItem('numeroGanador', numeroGanador);
                 //nuevoAngulo = 0.034;
+
+                /*
+                // Funcion que se encarga de repartir las ganancias
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
+                    } 
+                });
+                */ 
             }
         },
         error: function(respuesta){

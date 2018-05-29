@@ -67,7 +67,7 @@ $( "td" ).click(function(e) {
         }
         // PAR/IMPAR
         else if( this.id == "par" || this.id == "impar" ){
-            tipo = "par/impar";
+            tipo = "par-impar";
             valor = this.id;
         }
         // NUMERO
@@ -76,7 +76,11 @@ $( "td" ).click(function(e) {
             valor = this.id;
         }
 
+<<<<<<< HEAD
        
+=======
+        //alert("https://appcasino.herokuapp.com/api/apostar/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('token')+"/"+valor+"/"+tipo+"/"+$('#creditosApuesta').val());
+>>>>>>> bfbb18787db59d7bd69dbf139cc9d37133bfde8e
         /*
         *   Funcion que se encarga de ir enviando las apuestas durante le periodo de tiempo
         */
@@ -353,12 +357,29 @@ function numeroRandom(){
     });  
 }
 
+<<<<<<< HEAD
 
 // Una vez acabado el tiempo, se reparten las ganancias
 function ganancias() { 
     $.ajax({
         type : "GET",
         url : "https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador'),     
+=======
+                // Funcion que se encarga de repartir las ganancias
+                $.ajax({
+                    type : "GET",
+                    url : "https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),     
+
+                    success: function(respuesta){
+                        respuesta = JSON.parse(respuesta);
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
+                    },
+                    error: function(respuesta){
+                        console.log( "erroor ganancias----> " + JSON.stringify(respuesta) );
+                        //alert("https://appcasino.herokuapp.com/api/ganancias2/"+localStorage.getItem('id_partida')+"/"+localStorage.getItem('numeroGanador')+"/"+localStorage.getItem('token'),);
+                    } 
+                });  
+>>>>>>> bfbb18787db59d7bd69dbf139cc9d37133bfde8e
 
         success: function(respuesta){
             respuesta = JSON.parse(respuesta);

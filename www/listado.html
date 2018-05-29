@@ -48,8 +48,10 @@
         <script type="text/javascript" src="js/script.js"></script>
 
         <script>
-
-            // Obtencion de las salas
+            $("#ir_ajustes").click(function() {
+                window.location.replace("inicio.html");
+            });
+            
             $.ajax({
                 type : "GET",
                 url : "http://appcasino.herokuapp.com/api/salas_ruleta",     

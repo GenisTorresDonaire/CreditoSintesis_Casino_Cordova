@@ -1,47 +1,4 @@
 
-//login
-
-
-
-
-
-
-/*
-
------------------- Cojo informacion necesaria para el resto de funciones
-
-*/
-
-
-
-
-/*$.ajax({            
-
-    type: 'GET',
-    url: 'https://appcasino.herokuapp.com/api/idPartida/'+localStorage.getItem("token"), 
-
-
-    success: function (msg) { 
-
-        
-        msg = JSON.parse(msg);
-        
-        if( msg.estado == 'ok'){
-            localStorage.setItem("idPartida", msg.idPartida); 
-            localStorage.setItem("estadoPartida" , msg.estadoPartida);
-            alert("ojo  "+msg.idPartida);   
-            alert("estado "+msg.estadoPartida);          
-        }
-   
-    },
-    error: function (request, status, error) {
-        //alert("blyeeeet");
-        alert(JSON.stringify(request));
-        //alert("fuck");
-    }
-});*/
-
-
 //function
 
 $("#menuAjustes").hide();
@@ -54,10 +11,16 @@ $("#menuGanado").hide();
 
 $("#perdido").click(function(e){
     $("#menuPerdido").hide();
+    $("#puntos").text("0");
+    $("#puntosIA").text("0");
+    quitarCartas();
 });
 
 $("#ganado").click(function(e){
     $("#menuGanado").hide();
+    $("#puntos").text("0");
+    $("#puntosIA").text("0");
+    quitarCartas();
 });
 
 
@@ -77,7 +40,7 @@ $('#salirSala').click(function(e) {
             setTimeout(function() {window.location.replace("lista_bj.html")} , 1000);
         },
         error: function(respuesta){
-            alert("https://appcasino.herokuapp.com/api/salirRoomBj"+localStorage.getItem('token'),);
+            //alert("https://appcasino.herokuapp.com/api/salirRoomBj"+localStorage.getItem('token'),);
             console.log( "erroor ----> " + JSON.stringify(respuesta) );
         } 
     }); 
@@ -102,7 +65,11 @@ function rondaJugador(){
             },
             error: function (request, status, error) {
                //alert("ni");
+<<<<<<< HEAD
                 alert(JSON.stringify(request)); 
+=======
+                //alert(JSON.stringify(request)); 
+>>>>>>> bfbb18787db59d7bd69dbf139cc9d37133bfde8e
             }
         });
 }
@@ -377,7 +344,7 @@ function repartir(){
 
             },
             error: function (request, status, error) {       
-                alert(JSON.stringify(request));
+                //alert(JSON.stringify(request));
                
             }
         });
@@ -482,8 +449,8 @@ function IA(){
 
                                 setTimeout(puntosIA, 500);
 
-                                setTimeout(function(){$("#puntos").text("0"); } , 2500);                                 
-                                setTimeout(function(){$("#puntosIA").text("0"); } , 2500);                                                    
+                                //setTimeout(function(){$("#puntos").text("0"); } , 2500);                                 
+                                //setTimeout(function(){$("#puntosIA").text("0"); } , 2500);                                                    
 
                                 setTimeout(function() {$("#menuPerdido").show(); }, 2000);
                                 setTimeout(function() {$("#apostar").show();} , 1300);
@@ -493,7 +460,7 @@ function IA(){
                                 setTimeout(function() {$("#apuestaCreditos").text(""); } , 2500);       
 
 
-                                setTimeout(quitarCartas, 2500); 
+                                //setTimeout(quitarCartas, 2500); 
 
                                                          
 
@@ -545,8 +512,8 @@ function IA(){
                                             ); 
                                             
 
-                                            setTimeout(function(){$("#puntos").text("0"); } , 2000);                                 
-                                            setTimeout(function(){$("#puntosIA").text("0"); } , 2000);  
+                                           // setTimeout(function(){$("#puntos").text("0"); } , 2000);                                 
+                                            //setTimeout(function(){$("#puntosIA").text("0"); } , 2000);  
                                             setTimeout(function() {$("#apostar").show();} , 1300);              
 
                                             setTimeout(listaG,1500);
@@ -564,7 +531,7 @@ function IA(){
                                             setTimeout(creditos , 2750);                                         
                                             
 
-                                            setTimeout(quitarCartas, 2500);  
+                                            //setTimeout(quitarCartas, 2500);  
 
                                             //setTimeout(repartir, 3000);
 
@@ -650,8 +617,8 @@ $.ajax({
        
         },
         error: function (request, status, error) {
-           alert("ni");
-            alert(JSON.stringify(request));
+           //alert("ni");
+            //alert(JSON.stringify(request));
             
         }
     });
@@ -980,7 +947,7 @@ $('#dobla').click(function(){
         error: function (request, status, error) { 
             //alert('https://appcasino.herokuapp.com/api/pide/'+localStorage.getItem("idPartida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"));
             //alert("subsuelo");
-            alert('https://appcasino.herokuapp.com/api/dobla/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"));
+            //alert('https://appcasino.herokuapp.com/api/dobla/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"));
         }
     });
 
