@@ -358,6 +358,7 @@ function quitarCartas(){
                     type: 'GET',
                     url: 'https://appcasino.herokuapp.com/api/quitarCartas/'+localStorage.getItem("id_partida"), 
 
+                    //quito las cartas del tablero
 
                     success: function (msg) { 
 
@@ -400,7 +401,7 @@ function quitarCartas(){
 
 
 function turnos() {   
-    
+    //
     rondaJugador();
     listaJugadores();
     ronda();
@@ -410,8 +411,6 @@ function turnos() {
 
 
 function IA(){
-    //alert("Ronda Jugador " + localStorage.getItem("rondaJugador"));
-    //alert("Ronda Actual " + localStorage.getItem("rondaActual"));
   
         $.ajax({
             type: 'GET',
@@ -422,9 +421,11 @@ function IA(){
 
                 
                 msg = JSON.parse(msg);
-                
+                //si es el turno de la IA devolverá ia
+
                 if( msg.estado == 'ia'){
 
+                    //destapo la carta del crupier
                     $('#carta1C').empty();
                     $('#carta1C').css("background-color" ,"white");
                     $('#carta1C').append('<img style="height:95px; width: 55px;" src="img/Cartas/'+localStorage.getItem("cartaFiguraCrupier")+'/'+localStorage.getItem("cartaNumeroCrupier")+'.png"></img>');
@@ -443,7 +444,7 @@ function IA(){
 
                             if (msg1.estado == "fin") {
 
-                                //alert("FIN RONDA");
+                                //si es fin la maquina ha ganado
 
                                 setTimeout(puntosIA, 500);
 
@@ -472,7 +473,7 @@ function IA(){
 
                                         success: function (msg) {
                                             msg = JSON.parse(msg);
-                                            //alert("PIIIIIDE");
+                                            //la maquina pide una carta y la printo en su sitio en el tablero
 
                                             setTimeout(function() {
                                                 $('#carta'+(msg.numCartas)+'C') .css("background-color" ,"white");
@@ -490,7 +491,7 @@ function IA(){
                                         }
                                       });
                              }else if (msg1.estado == "pasa"){
-                                //alert("PASA");
+                                //la maquina se ha pasado y el jugador gana
                                  $.ajax({
                                         type: 'GET',
                                         url: 'https://appcasino.herokuapp.com/api/contarCartasIa/'+localStorage.getItem("id_partida"), 
@@ -568,7 +569,7 @@ function listaG(){
             type: 'GET',
             url: 'https://appcasino.herokuapp.com/api/listaG/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("rondaActual"), 
 
-
+            //llamada al reparto de creditos
             success: function (msg) { 
                  msg = JSON.parse(msg);
                  //alert(msg.estado);
@@ -602,7 +603,7 @@ $.ajax({
 
         success: function (msg) { 
 
-           
+            //llamada a ronda actual para recibir la ronda de la partida
             msg = JSON.parse(msg);
             
             
@@ -646,7 +647,7 @@ $('#apostar').click(function(){
 
     $("#apuestaCreditos").text(localStorage.getItem("apuesta"));
 
-    //alert(apuesta);
+    //Apuesto los creditos y actualizo el recuadro de creditosUsuario;
 
     $.ajax({
         type: 'GET',
@@ -678,10 +679,12 @@ $('#pide').click(function(){
 
                     success: function (msg) { 
                         msg1 = JSON.parse(msg);
-                        //alert("ESTADO PIDE "+ msg1.estado);
+                        //Si devuelvo pide , pido una y continuo jugando 
+                        //Si devuelvo pasa significa que me he pasado en puntos y pasaré turno
 
                         if (msg1.estado == 'pide') {
-                            //alert("PIDE");
+                            //Pido una carta mas , dependieendo del jugador y del numero de cartas que tengan se printara 
+                            //en un sitio u otro
                             $.ajax({
                                 type: 'GET',
                                 url: 'https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token"), 
@@ -730,8 +733,8 @@ $('#pide').click(function(){
                             });
 
                         }else if (msg1.estado == 'pasa'){
-                            //alert(JSON.stringify(msg1));
-                            //alert(msg1.figura);
+                            //Pido una carta mas , dependieendo del jugador y del numero de cartas que tengan se printara 
+                            //en un sitio u otro
                             $.ajax({
                                 type: 'GET',
                                 url: 'https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token"), 
@@ -801,6 +804,7 @@ $('#pasa').click(function(){
                  	type: 'GET',
                     url: 'https://appcasino.herokuapp.com/api/pasa/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"), 
 
+                    //pasas turno
 
                     success: function (msg) { 
 
@@ -828,6 +832,7 @@ $('#dobla').click(function(){
         url: 'https://appcasino.herokuapp.com/api/dobla/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token")+'/'+localStorage.getItem("rondaActual"), 
 
 
+
         success: function (msg) { 
             msg1 = JSON.parse(msg);
             var apuesta;
@@ -838,19 +843,19 @@ $('#dobla').click(function(){
             $("#apuestaCreditos").text(apuesta);
 
 
-            //alert("ESTADO PIDE "+ msg1.estado);
+            
 
             if (msg1.estado == 'pide') {
-                //alert("PIDE");
+                
                 $.ajax({
                     type: 'GET',
                     url: 'https://appcasino.herokuapp.com/api/contarCartas/'+localStorage.getItem("id_partida")+'/'+localStorage.getItem("token"), 
 
 
                     success: function (msg) { 
-                        //alert("TODO BIEN X2");
+                        //Al doblar pido una carta mas , doblo la apuesta y paso
                         msg = JSON.parse(msg);
-                       // alert(msg1.figura);
+                       
 
                         for (var i = 0; i < localStorage.getItem("listaJugadores").length ; i++) {
                            
